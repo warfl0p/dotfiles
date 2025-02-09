@@ -11,15 +11,17 @@ echo "Setting Zsh as default shell..."
 chsh -s $(which zsh)
 
 # Clone dotfiles
-DOTFILES_DIR="$HOME/.dotfiles"
+DOTFILES_DIR="$HOME/dotfiles"
 if [ ! -d "$DOTFILES_DIR" ]; then
     echo "Cloning dotfiles..."
-    git clone https://github.com/YOUR_USERNAME/dotfiles.git "$DOTFILES_DIR"
+    git clone https://github.com/warfl0p/dotfiles.git "$DOTFILES_DIR"
 fi
+
 
 sudo apt install stow
 cd "$DOTFILES_DIR"
-stow zsh
+stow .
+
 
 
 echo "Done! Restart your shell or log out and back in."
