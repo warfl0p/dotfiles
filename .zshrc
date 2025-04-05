@@ -24,7 +24,7 @@ zinit light-mode for \
 ### End of Zinit's installer chunk
 
 # ohmy posh
-export PATH=$PATH:/home/root/bin
+export PATH=$PATH:/home/matthias/bin
 eval "$(oh-my-posh --config '~/custom_kushal.omp.json' init zsh)"
 
 # Add in zsh plugins
@@ -76,8 +76,7 @@ alias ls='ls --color'
 alias c='clear'
 
 # Shell integrations
-# eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 # activate virtual environment
 activate() {
     if [ -f .venv/bin/activate ]; then
@@ -86,14 +85,8 @@ activate() {
         echo "Error: .venv/bin/activate not found in the current directory."
     fi
 }
+# fzf ctrl r
+source <(fzf --zsh)
 
-# tmux
-export TMUX_CONF="~/tmux/tmux.conf"
 # remove unwanted suggestions
 zstyle ':completion:*:complete:-command-:*:*' ignored-patterns '*.dll|*.exe|*.so|*.pyd'
-
-# fzf
-# Set up fzf key bindings and fuzzy completion
-source <(fzf --zsh)
-# eza better ls
-# alias ls="eza --color=always --git --no-filesize --icons=never --no-time --no-user --no-permissions"
