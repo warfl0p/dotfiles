@@ -24,7 +24,7 @@ zinit light-mode for \
 ### End of Zinit's installer chunk
 
 # ohmy posh
-export PATH=$PATH:/home/matthias/bin
+export PATH=$PATH:/home/root/bin
 eval "$(oh-my-posh --config '~/custom_kushal.omp.json' init zsh)"
 
 # Add in zsh plugins
@@ -76,7 +76,7 @@ alias ls='ls --color'
 alias c='clear'
 
 # Shell integrations
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 # activate virtual environment
 activate() {
