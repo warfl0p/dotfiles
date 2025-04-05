@@ -87,7 +87,8 @@ activate() {
     fi
 }
 
-
+# tmux
+export TMUX_CONF="~/tmux/tmux.conf"
 # remove unwanted suggestions
 zstyle ':completion:*:complete:-command-:*:*' ignored-patterns '*.dll|*.exe|*.so|*.pyd'
 
