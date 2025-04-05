@@ -78,6 +78,21 @@ alias c='clear'
 # Shell integrations
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
+# activate virtual environment
+activate() {
+    if [ -f .venv/bin/activate ]; then
+        source .venv/bin/activate
+    else
+        echo "Error: .venv/bin/activate not found in the current directory."
+    fi
+}
+
 
 # remove unwanted suggestions
 zstyle ':completion:*:complete:-command-:*:*' ignored-patterns '*.dll|*.exe|*.so|*.pyd'
+
+# fzf
+# Set up fzf key bindings and fuzzy completion
+source <(fzf --zsh)
+# eza better ls
+# alias ls="eza --color=always --git --no-filesize --icons=never --no-time --no-user --no-permissions"
