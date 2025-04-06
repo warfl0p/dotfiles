@@ -24,9 +24,12 @@ curl -s https://ohmyposh.dev/install.sh | bash -s -- -d ~/bin
 
 sudo apt install stow
 cd "$DOTFILES_DIR"
-tmux source-file .tmux.conf
-stow .
 
+stow .
+# tmux theme and source config
+mkdir -p ~/.config/tmux/plugins/catppuccin
+git clone -b v2.1.3 https://github.com/catppuccin/tmux.git ~/.config/tmux/plugins/catppuccin/tmux
+tmux source ~/.tmux.conf
 
 
 echo "Done! Restart your shell or log out and back in."
