@@ -24,6 +24,7 @@ curl -s https://ohmyposh.dev/install.sh | bash -s -- -d ~/bin
 
 sudo apt install stow
 cd "$DOTFILES_DIR"
+tmux source-file .tmux.conf
 stow .
 
 
