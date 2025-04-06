@@ -44,6 +44,12 @@ if ! command -v brew &> /dev/null; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
+# install gh and authorize
+if ! command -v gh &> /dev/null; then
+    echo "Installing GitHub CLI..."
+    sudo apt install gh
+    gh auth login
+fi
 
 
 echo "Done! Restart your shell or log out and back in."
