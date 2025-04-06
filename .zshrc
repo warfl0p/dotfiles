@@ -87,6 +87,7 @@ activate() {
 }
 # fzf ctrl r
 source <(fzf --zsh)
-
+zinit ice lucid wait'0'
+zinit light joshskidmore/zsh-fzf-history-search
 # remove unwanted suggestions
 zstyle ':completion:*:complete:-command-:*:*' ignored-patterns '*.dll|*.exe|*.so|*.pyd'
