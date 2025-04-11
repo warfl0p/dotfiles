@@ -7,3 +7,5 @@
 [user]
 	email = matthias.warlop@hotmail.be
 	name = warfl0p
+[credential]
+	helper = cache --timeout=2592000
