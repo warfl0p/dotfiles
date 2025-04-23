@@ -10,11 +10,6 @@ fi
 source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
-# fzf ctrl r
-source <(fzf --zsh)
-zinit ice lucid wait'0'
-zinit light joshskidmore/zsh-fzf-history-search
-
 
 
 # Load a few important annexes, without Turbo
@@ -35,7 +30,6 @@ eval "$(oh-my-posh --config '~/custom_kushal.omp.json' init zsh)"
 zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
-#zinit light Aloxaf/fzf-tab
 
 # Add in snippets
 zinit snippet OMZL::git.zsh
@@ -89,6 +83,10 @@ activate() {
         echo "Error: .venv/bin/activate not found in the current directory."
     fi
 }
+
+# fzf ctrl r
+source <(fzf --zsh)
+
 # remove unwanted suggestions
 zstyle ':completion:*:complete:-command-:*:*' ignored-patterns '*.dll|*.exe|*.so|*.pyd'
 # add uv zsh completions
@@ -113,3 +111,4 @@ bindkey '^H' backward-kill-word
 bindkey "\e[3;6~" kill-line
 # urxvt
 bindkey "\e[3@" kill-line
+

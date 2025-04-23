@@ -44,6 +44,10 @@ if ! command -v brew &> /dev/null; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
+if ! command -v fzf >/dev/null 2>&1; then
+  brew install fzf
+fi
+
 # install gh and authorize
 if ! command -v gh &> /dev/null; then
     echo "Installing GitHub CLI..."
