@@ -22,6 +22,9 @@ zinit light-mode for \
 
 ### End of Zinit's installer chunk
 
+# fzf ctrl r
+source <(fzf --zsh)
+
 # ohmy posh
 export PATH=$PATH:/home/matthias/bin
 eval "$(oh-my-posh --config '~/custom_kushal.omp.json' init zsh)"
@@ -84,8 +87,6 @@ activate() {
     fi
 }
 
-# fzf ctrl r
-source <(fzf --zsh)
 
 # remove unwanted suggestions
 zstyle ':completion:*:complete:-command-:*:*' ignored-patterns '*.dll|*.exe|*.so|*.pyd'
