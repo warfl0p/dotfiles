@@ -1,7 +1,5 @@
 #!/bin/bash
 
-
-sudo apt install fzf
 # Install Zsh
 sudo apt install unzip
 if ! command -v zsh &> /dev/null; then
