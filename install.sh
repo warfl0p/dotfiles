@@ -22,7 +22,7 @@ fi
 
 # install oh my posh
 mkdir ~/bin
-export PATH=$PATH:/root/bin
+export PATH="$PATH:$HOME/bin"
 curl -s https://ohmyposh.dev/install.sh | bash -s -- -d ~/bin
 oh-my-posh font install meslo
 
