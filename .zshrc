@@ -21,6 +21,8 @@ zinit light-mode for \
     zdharma-continuum/zinit-annex-rust
 
 ### End of Zinit's installer chunk
+# Shell integrations
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 # fzf ctrl r
 source <(fzf --zsh)
@@ -76,8 +78,6 @@ zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 alias ls='ls --color'
 alias c='clear'
 
-# Shell integrations
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 # activate virtual environment
 activate() {
     if [ -f .venv/bin/activate ]; then
