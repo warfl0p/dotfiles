@@ -42,6 +42,7 @@ fi
 if ! command -v brew &> /dev/null; then
     echo "Installing Homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    brew install uv
 fi
 
 if ! command -v fzf >/dev/null 2>&1; then
