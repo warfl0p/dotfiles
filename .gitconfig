@@ -9,3 +9,8 @@
 	name = warfl0p
 [credential]
 	helper = cache --timeout=2592000
+[status]
+	showUntrackedFiles = all
+[init]
+	defaultBranch = main
+
