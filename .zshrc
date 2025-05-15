@@ -86,12 +86,27 @@ activate() {
         echo "Error: .venv/bin/activate not found in the current directory."
     fi
 }
+# auto start ssh
+# Start ssh-agent if not running and add SSH key
+if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+  eval "$(ssh-agent -s)" >/dev/null 2>&1
+fi
+
+if [ -f ~/.ssh/bitbucket_work ]; then
+  ssh-add -q ~/.ssh/bitbucket_work >/dev/null 2>&1
+fi
+
 
 
 # remove unwanted suggestions
 zstyle ':completion:*:complete:-command-:*:*' ignored-patterns '*.dll|*.exe|*.so|*.pyd'
 # add uv zsh completions
 eval "$(uv generate-shell-completion zsh)"
+
+
+
+# add golang path
+export PATH=$PATH:/usr/local/go/bin
 # allow for ctr+arrow keys navigation
 ### ctrl+arrows
 bindkey "\e[1;5C" forward-word
@@ -113,3 +128,5 @@ bindkey "\e[3;6~" kill-line
 # urxvt
 bindkey "\e[3@" kill-line
 
+# typer autocompletes for optimile project
+fpath+=~/.zfunc; autoload -Uz compinit; compinit
