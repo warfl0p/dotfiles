@@ -59,5 +59,14 @@ if ! command -v fzf >/dev/null 2>&1; then
   brew install fzf
 fi
 
+# install fzf-tab
+FZF_TAB_DIR="$HOME/.zsh_plugins/fzf-tab"
+if [ ! -d "$FZF_TAB_DIR" ]; then
+    echo "Installing fzf-tab..."
+    mkdir -p ~/.zsh_plugins
+    git clone https://github.com/Aloxaf/fzf-tab "$FZF_TAB_DIR"
+fi
+
+
 
 echo "Done! Restart your shell or log out and back in."

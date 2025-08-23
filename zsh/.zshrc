@@ -27,9 +27,12 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 # fzf ctrl r
 source <(fzf --zsh)
 
+# fzf-tab plugin
+source ~/.zsh_plugins/fzf-tab/fzf-tab.plugin.zsh
+
 # ohmy posh
 export PATH=$PATH:/home/matthias/bin
-eval "$(oh-my-posh --config '~/custom_kushal.omp.json' init zsh)"
+eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/themes/custom_kushal.omp.json)"
 
 # Add in zsh plugins
 zinit light zsh-users/zsh-syntax-highlighting
