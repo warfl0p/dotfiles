@@ -19,6 +19,8 @@ font pango:MesloLGS Nerd Font Regular 12
 exec_always killall polybar
 exec_always --no-startup-id ~/.config/polybar/launch_polybar.sh
 
+# start new windows in full screen 
+# for_window [all] fullscreen enable
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
