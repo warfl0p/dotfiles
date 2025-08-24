@@ -14,6 +14,7 @@ if ! command -v zsh &> /dev/null; then
     sudo apt install -y zsh
 fi
 
+<<<<<<< Updated upstream
 # Make Zsh default shell
 if [ "$SHELL" != "$(which zsh)" ]; then
     echo "Setting Zsh as default shell..."
@@ -21,6 +22,55 @@ if [ "$SHELL" != "$(which zsh)" ]; then
 fi
 
 # Clone dotfiles if missing
+=======
+# Check current default shell
+CURRENT_SHELL=$(getent passwd "$USER" | cut -d: -f7)
+if [[ "$CURRENT_SHELL" != "$(which zsh)" ]]; then
+    echo "Setting Zsh as default shell..."
+    chsh -s $(which zsh)
+else
+    echo "Zsh is already the default shell."
+fi
+
+# install curl
+sudo apt install fzf
+sudo apt install curl
+sudo apt install tmux
+sudo apt install gh
+gh auth login
+sudo apt install tree
+sudo apt install htop
+sudo apt install i3
+
+
+# alacrity
+# dependencies
+sudo apt install cmake g++ pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
+#ppa 
+sudo add-apt-repository ppa:aslatter/ppa -y
+sudo apt install alacritty
+
+#ohmyposh
+mkdir "$HOME/bin"
+curl -s https://ohmyposh.dev/install.sh | bash -s -- -d ~/bin
+oh-my-posh font install meslo
+
+
+
+# Install Homebrew
+if ! command -v brew &> /dev/null; then
+    echo "Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    
+    # Add Homebrew to PATH for Linux
+    if [ "$(uname -s)" = "Linux" ]; then
+        echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.bashrc
+        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    fi
+fi
+# Clone dotfiles
+DOTFILES_DIR="$HOME/dotfiles"
+>>>>>>> Stashed changes
 if [ ! -d "$DOTFILES_DIR" ]; then
     echo "Cloning dotfiles..."
     git clone https://github.com/warfl0p/dotfiles.git "$DOTFILES_DIR"
