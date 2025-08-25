@@ -31,16 +31,8 @@
                     "type": "os"
                 },
                 {
-                    "background": "#e4e4e4",
-                    "foreground": "#3f3f3f",
-                    "style": "powerline",
-                    "powerline_symbol": "\ue0b0",
-                    "template": " {{ .UserName }} ",
-                    "type": "session"
-                },
-                {
-                    "background": "#0087af",
-                    "foreground": "#f2f3f8",
+                    "background": "#3f3f3f",
+                    "foreground": "#e4e4e4",
                     "properties": {
                         "style": "agnoster_short",
                         "max_depth": 3,
