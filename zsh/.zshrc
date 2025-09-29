@@ -26,7 +26,7 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 # fzf ctrl r
 source <(fzf --zsh)
-
+# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # fzf-tab plugin
 source ~/.zsh_plugins/fzf-tab/fzf-tab.plugin.zsh
 

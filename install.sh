@@ -14,15 +14,6 @@ if ! command -v zsh &> /dev/null; then
     sudo apt install -y zsh
 fi
 
-<<<<<<< Updated upstream
-# Make Zsh default shell
-if [ "$SHELL" != "$(which zsh)" ]; then
-    echo "Setting Zsh as default shell..."
-    chsh -s "$(which zsh)"
-fi
-
-# Clone dotfiles if missing
-=======
 # Check current default shell
 CURRENT_SHELL=$(getent passwd "$USER" | cut -d: -f7)
 if [[ "$CURRENT_SHELL" != "$(which zsh)" ]]; then
@@ -33,11 +24,8 @@ else
 fi
 
 # install curl
-sudo apt install fzf
 sudo apt install curl
 sudo apt install tmux
-sudo apt install gh
-gh auth login
 sudo apt install tree
 sudo apt install htop
 sudo apt install i3
@@ -49,12 +37,6 @@ sudo apt install cmake g++ pkg-config libfreetype6-dev libfontconfig1-dev libxcb
 #ppa 
 sudo add-apt-repository ppa:aslatter/ppa -y
 sudo apt install alacritty
-
-#ohmyposh
-mkdir "$HOME/bin"
-curl -s https://ohmyposh.dev/install.sh | bash -s -- -d ~/bin
-oh-my-posh font install meslo
-
 
 
 # Install Homebrew
@@ -70,7 +52,6 @@ if ! command -v brew &> /dev/null; then
 fi
 # Clone dotfiles
 DOTFILES_DIR="$HOME/dotfiles"
->>>>>>> Stashed changes
 if [ ! -d "$DOTFILES_DIR" ]; then
     echo "Cloning dotfiles..."
     git clone https://github.com/warfl0p/dotfiles.git "$DOTFILES_DIR"
