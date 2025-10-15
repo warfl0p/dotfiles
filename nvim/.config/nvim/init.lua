@@ -12,20 +12,34 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("sethy.core")
-require("sethy.lazy")
+-- make d delete without yanking
+vim.keymap.set({"n", "x"}, "d", '"_d')
+-- make x cut (delete with yank)
+vim.keymap.set({"n", "x"}, "x", 'd')
 
+if vim.g.vscode then
+  -- Only active in VSCode Neovim extension
+  vim.opt.clipboard = "unnamedplus"
+  vim.keymap.set("n", "<Esc><Esc>", ":nohlsearch<CR>", { noremap = true, silent = true })
+else
+  
+  -- All your normal Neovim config
+  require("sethy.core")
+  require("sethy.lazy")
 
-vim.g.clipboard = {
-  name = 'WslClipboard',
-  copy = {
-    ['+'] = 'clip.exe',
-    ['*'] = 'clip.exe',
-  },
-  paste = {
-    ['+'] = 'powershell.exe -NoProfile -Command Get-Clipboard',
-    ['*'] = 'powershell.exe -NoProfile -Command Get-Clipboard',
-  },
-  cache_enabled = 0,
-}
-
+  -- Clipboard integration
+  if vim.fn.has("wsl") == 1 then
+    vim.g.clipboard = {
+      name = "WslClipboard",
+      copy = {
+        ["+"] = "clip.exe",
+        ["*"] = "clip.exe",
+      },
+      paste = {
+        ["+"] = 'powershell.exe -NoProfile -Command Get-Clipboard',
+        ["*"] = 'powershell.exe -NoProfile -Command Get-Clipboard',
+      },
+      cache_enabled = 0,
+    }
+  end
+end
