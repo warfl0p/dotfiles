@@ -4,14 +4,11 @@ set -e
 
 DOTFILES_DIR="$HOME/dotfiles"
 
-# Ensure deps
-sudo apt update
-sudo apt install -y unzip stow curl git
-
+sudo pacman -Syu --noconfirm stow
 # Install Zsh
 if ! command -v zsh &> /dev/null; then
     echo "Installing Zsh..."
-    sudo apt install -y zsh
+    sudo pacman -S --noconfirm zsh
 fi
 
 # Check current default shell
@@ -23,35 +20,20 @@ else
     echo "Zsh is already the default shell."
 fi
 
-# install curl
-sudo apt install curl
-sudo apt install tmux
-sudo apt install tree
-sudo apt install htop
-sudo apt install i3
-
-
-# alacrity
-# dependencies
-sudo apt install cmake g++ pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
-#ppa 
-sudo add-apt-repository ppa:aslatter/ppa -y
-sudo apt install alacritty
-
+# Alacritty (repo version)
+if ! command -v alacritty &> /dev/null; then
+    sudo pacman -S --noconfirm alacritty
+fi
 
 # Install Homebrew
 if ! command -v brew &> /dev/null; then
     echo "Installing Homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    
-    # Add Homebrew to PATH for Linux
-    if [ "$(uname -s)" = "Linux" ]; then
-        echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.bashrc
-        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-    fi
+    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.zshrc
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
+
 # Clone dotfiles
-DOTFILES_DIR="$HOME/dotfiles"
 if [ ! -d "$DOTFILES_DIR" ]; then
     echo "Cloning dotfiles..."
     git clone https://github.com/warfl0p/dotfiles.git "$DOTFILES_DIR"
@@ -67,17 +49,11 @@ fi
 
 # Install GitHub CLI
 if ! command -v gh &> /dev/null; then
-    echo "Installing GitHub CLI..."
-    sudo apt install -y gh
+    sudo pacman -S --noconfirm gh
     gh auth login
 fi
 
 # Install Tmux + Catppuccin theme
-if ! command -v tmux &> /dev/null; then
-    echo "Installing Tmux..."
-    sudo apt install -y tmux
-fi
-
 CATPUCCIN_DIR="$HOME/.config/tmux/plugins/catppuccin/tmux"
 if [ ! -d "$CATPUCCIN_DIR" ]; then
     mkdir -p "$(dirname "$CATPUCCIN_DIR")"
@@ -86,37 +62,22 @@ fi
 
 # Install Neovim
 if ! command -v nvim &> /dev/null; then
-    echo "Installing Neovim..."
-    sudo apt install -y neovim
+    sudo pacman -S --noconfirm neovim
 fi
 
-# Homebrew
-if ! command -v brew &> /dev/null; then
-    echo "Installing Homebrew..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-fi
+# Install Homebrew packages (preserve your original Brew installs)
+brew install uv
+brew install fzf
 
-# uv
-if ! command -v uv &> /dev/null; then
-    brew install uv
-fi
-
-# fzf
-if ! command -v fzf &> /dev/null; then
-    brew install fzf
-fi
-
-# fzf-tab
+# fzf-tab plugin
 FZF_TAB_DIR="$HOME/.zsh_plugins/fzf-tab"
 if [ ! -d "$FZF_TAB_DIR" ]; then
-    echo "Installing fzf-tab..."
     mkdir -p ~/.zsh_plugins
     git clone https://github.com/Aloxaf/fzf-tab "$FZF_TAB_DIR"
 fi
 
 # Stow dotfiles
 cd "$DOTFILES_DIR"
-stow -t ~ git tmux i3 posh zsh nvim
+stow -t ~ git tmux posh zsh 
 
 echo "Done! Restart your shell or log out and back in."
