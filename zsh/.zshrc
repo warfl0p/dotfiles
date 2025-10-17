@@ -133,3 +133,23 @@ bindkey "\e[3@" kill-line
 
 # typer autocompletes for optimile project
 fpath+=~/.zfunc; autoload -Uz compinit; compinit
+
+
+if [ -z "$TMUX" ]; then
+  # Ctrl+A outside tmux → start/attach tmux session in ~
+  bindkey -s '^A' 'tmux attach -t matthias 2>/dev/null || (cd ~ && tmux new -s home)\n'
+fi
+
+# Automatically start or attach to tmux
+if command -v tmux &> /dev/null; then
+  # Only run if not already in tmux
+  if [ -z "$TMUX" ]; then
+    # Skip auto-tmux in VS Code integrated terminal
+    if [ -z "$VSCODE_PID" ]; then
+      # Session name: use current directory name
+      session_name=$(basename "$(pwd)")
+      tmux attach -t "$session_name" 2>/dev/null || tmux new -s "$session_name"
+    fi
+  fi
+fi
+
