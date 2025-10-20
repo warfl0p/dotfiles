@@ -140,16 +140,3 @@ if [ -z "$TMUX" ]; then
   bindkey -s '^A' 'tmux attach -t matthias 2>/dev/null || (cd ~ && tmux new -s home)\n'
 fi
 
-# Automatically start or attach to tmux
-if command -v tmux &> /dev/null; then
-  # Only run if not already in tmux
-  if [ -z "$TMUX" ]; then
-    # Skip auto-tmux in VS Code integrated terminal
-    if [ -z "$VSCODE_PID" ]; then
-      # Session name: use current directory name
-      session_name=$(basename "$(pwd)")
-      tmux attach -t "$session_name" 2>/dev/null || tmux new -s "$session_name"
-    fi
-  fi
-fi
-
