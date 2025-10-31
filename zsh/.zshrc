@@ -31,7 +31,7 @@ source <(fzf --zsh)
 source ~/.zsh_plugins/fzf-tab/fzf-tab.plugin.zsh
 
 # ohmy posh
-export PATH=$PATH:/home/matthias/bin
+export PATH="$HOME/bin:$PATH"
 eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/themes/custom_kushal.omp.json)"
 
 # Add in zsh plugins

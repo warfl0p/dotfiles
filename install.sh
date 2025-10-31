@@ -102,4 +102,6 @@ fi
 cd "$DOTFILES_DIR"
 stow -t ~ git tmux posh zsh nvim
 
+source ~/.zshrc
+
 echo "Done! Restart your shell or log out and back in."
