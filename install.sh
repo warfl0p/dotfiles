@@ -100,6 +100,6 @@ fi
 
 # Stow dotfiles
 cd "$DOTFILES_DIR"
-stow -t ~ git tmux i3 posh zsh nvim
+stow -t ~ git tmux posh zsh nvim
 
 echo "Done! Restart your shell or log out and back in."
