@@ -131,5 +131,3 @@ bindkey "\e[3;6~" kill-line
 # urxvt
 bindkey "\e[3@" kill-line
 
-# typer autocompletes for optimile project
-fpath+=~/.zfunc; autoload -Uz compinit; compinit

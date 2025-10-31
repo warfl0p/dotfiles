@@ -27,17 +27,6 @@ fi
 sudo apt install curl
 sudo apt install tmux
 sudo apt install tree
-sudo apt install htop
-sudo apt install i3
-
-
-# alacrity
-# dependencies
-sudo apt install cmake g++ pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
-#ppa 
-sudo add-apt-repository ppa:aslatter/ppa -y
-sudo apt install alacritty
-
 
 # Install Homebrew
 if ! command -v brew &> /dev/null; then
@@ -50,6 +39,7 @@ if ! command -v brew &> /dev/null; then
         eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
     fi
 fi
+
 # Clone dotfiles
 DOTFILES_DIR="$HOME/dotfiles"
 if [ ! -d "$DOTFILES_DIR" ]; then
@@ -63,13 +53,6 @@ if ! command -v oh-my-posh &> /dev/null; then
     export PATH="$PATH:$HOME/bin"
     curl -s https://ohmyposh.dev/install.sh | bash -s -- -d ~/bin
     oh-my-posh font install meslo
-fi
-
-# Install GitHub CLI
-if ! command -v gh &> /dev/null; then
-    echo "Installing GitHub CLI..."
-    sudo apt install -y gh
-    gh auth login
 fi
 
 # Install Tmux + Catppuccin theme
