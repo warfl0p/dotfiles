@@ -28,18 +28,6 @@ sudo apt install curl
 sudo apt install tmux
 sudo apt install tree
 
-# Install Homebrew
-if ! command -v brew &> /dev/null; then
-    echo "Installing Homebrew..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    
-    # Add Homebrew to PATH for Linux
-    if [ "$(uname -s)" = "Linux" ]; then
-        echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.bashrc
-        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-    fi
-fi
-
 # Install oh-my-posh
 if ! command -v oh-my-posh &> /dev/null; then
     mkdir -p ~/bin
@@ -81,6 +69,17 @@ fi
 # fzf
 if ! command -v fzf &> /dev/null; then
     brew install fzf
+fi
+
+# sesh 
+# https://github.com/joshmedeski/sesh
+if ! command -v sesh &> /dev/null; then
+    brew install sesh
+fi
+
+# sessionizer
+if ! command -v tms &> /dev/null; then
+    brew install tmux-sessionizer
 fi
 
 # fzf-tab
