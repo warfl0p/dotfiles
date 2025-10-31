@@ -40,13 +40,6 @@ if ! command -v brew &> /dev/null; then
     fi
 fi
 
-# Clone dotfiles
-DOTFILES_DIR="$HOME/dotfiles"
-if [ ! -d "$DOTFILES_DIR" ]; then
-    echo "Cloning dotfiles..."
-    git clone https://github.com/warfl0p/dotfiles.git "$DOTFILES_DIR"
-fi
-
 # Install oh-my-posh
 if ! command -v oh-my-posh &> /dev/null; then
     mkdir -p ~/bin
