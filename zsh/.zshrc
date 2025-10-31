@@ -30,6 +30,60 @@ source <(fzf --zsh)
 # fzf-tab plugin
 source ~/.zsh_plugins/fzf-tab/fzf-tab.plugin.zsh
 
+modified-fzf-history-widget() {
+  local selected
+  setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases no_bash_rematch 2> /dev/null
+  # appends the current shell history buffer to the HISTFILE
+  builtin fc -AI $HISTFILE
+  # pushes entries from the $HISTFILE onto a stack and uses this history
+  builtin fc -p $HISTFILE $HISTSIZE $SAVEHIST
+  selected="$(builtin fc -rl 1 |
+    awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", cmd); if (!seen[cmd]++) print $0 }' |
+    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} ${FZF_DEFAULT_OPTS-} -n2..,.. --scheme=history --bind=ctrl-r:toggle-sort,ctrl-z:ignore ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER} --multi" $(__fzfcmd))"
+  local ret=$?
+	if [[ -n $selected ]]; then
+    if [[ "$selected" =~ ^[[:blank:]]*[[:digit:]]+ ]]; then
+	  builtin fc -pa "$HISTFILE"
+	  zle vi-fetch-history -n "$MATCH"
+    else # selected is a custom query, not from history
+      LBUFFER="$selected"
+    fi
+  fi
+  # Read the history from the history file into the history list
+  builtin fc -R $HISTFILE
+  zle reset-prompt
+  return $ret
+}
+zle -N modified-fzf-history-widget
+bindkey "^R" modified-fzf-history-widget
+
+
+export FZF_CTRL_R_OPTS="$(
+	cat <<'FZF_FTW'
+--bind "ctrl-d:execute-silent(zsh -ic 'builtin fc -p $HISTFILE $HISTSIZE $SAVEHIST; for i in {+1}; do ignore+=( \"${(b)history[$i]}\" );done;
+	HISTORY_IGNORE=\"(${(j:|:)ignore})\";builtin fc -W $HISTFILE')+reload:builtin fc -p $HISTFILE $HISTSIZE $SAVEHIST; builtin fc -rl 1 |
+	awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, \"\", cmd); if (!seen[cmd]++) print $0 }'"
+--bind 'enter:accept-or-print-query'
+--header 'enter select · ^d remove'
+--prompt ' Global History > '
+FZF_FTW
+)"
+
+# History
+export HISTSIZE=12000
+export SAVEHIST=10000
+export HISTFILE="${ZDOTDIR:-$HOME}"/.zsh_history
+# HISTFILE=~/.zsh_history
+HISTDUP=erase
+setopt appendhistory
+setopt SHARE_HISTORY
+setopt hist_ignore_space
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
+setopt hist_ignore_dups
+setopt hist_find_no_dups
+
+
 # ohmy posh
 export PATH=$PATH:/home/matthias/bin
 eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/themes/custom_kushal.omp.json)"
@@ -56,19 +110,6 @@ bindkey -e
 bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
 bindkey '^[w' kill-region
-
-# History
-HISTSIZE=5000
-HISTFILE=~/.zsh_history
-SAVEHIST=$HISTSIZE
-HISTDUP=erase
-setopt appendhistory
-setopt sharehistory
-setopt hist_ignore_space
-setopt hist_ignore_all_dups
-setopt hist_save_no_dups
-setopt hist_ignore_dups
-setopt hist_find_no_dups
 
 # Completion styling
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}' # make completion case-insensitive
