@@ -92,6 +92,16 @@ if [ ! -d "$FZF_TAB_DIR" ]; then
     git clone https://github.com/Aloxaf/fzf-tab "$FZF_TAB_DIR"
 fi
 
+# Install TPM (Tmux Plugin Manager)
+TPM_DIR="$HOME/.tmux/plugins/tpm"
+if [ ! -d "$TPM_DIR" ]; then
+    echo "Installing TPM..."
+    mkdir -p "$(dirname "$TPM_DIR")"
+    git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
+else
+    echo "TPM already installed."
+fi
+
 # Stow dotfiles
 cd "$DOTFILES_DIR"
 stow -t ~ git tmux posh zsh nvim
