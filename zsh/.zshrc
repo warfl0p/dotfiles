@@ -99,6 +99,8 @@ if [ -f ~/.ssh/bitbucket_work ]; then
   ssh-add -q ~/.ssh/bitbucket_work >/dev/null 2>&1
 fi
 
+# TMUX
+bindkey -s '^A' 'sesh connect $HOME^M'
 
 
 # remove unwanted suggestions
