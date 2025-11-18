@@ -31,6 +31,15 @@
                     "type": "os"
                 },
                 {
+                    "type": "session",
+                    "style": "diamond",
+                    "foreground": "#ffffff",
+                    "background": "#F3AE35",
+                    "leading_diamond": "<transparent,background>\ue0b0</>",
+                    "trailing_diamond": "",
+                    "template": "{{ if .SSHSession }} {{ end }}"
+                },
+                {
                     "background": "#3f3f3f",
                     "foreground": "#e4e4e4",
                     "properties": {

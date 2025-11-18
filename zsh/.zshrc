@@ -130,6 +130,10 @@ activate() {
         echo "Error: .venv/bin/activate not found in the current directory."
     fi
 }
+mem_usage() {
+top -b -n 1 | awk 'NR>7 {arr[$12]+=$6} END {for (i in arr) printf "%-60s %.2f GB\n", i, arr[i]/1024/1024}' | sort -nk2 | tail -n 20
+}
+
 # auto start ssh
 # Start ssh-agent if not running and add SSH key
 if ! pgrep -u "$USER" ssh-agent > /dev/null; then
