@@ -6,6 +6,15 @@
             "alignment": "left",
             "segments": [
                 {
+                    "type": "session",
+                    "style": "diamond",
+                    "foreground": "#ffffff",
+                    "background": "#c386f1",
+                    "leading_diamond": "",
+                    "trailing_diamond": "",
+                    "template": "{{ if .SSHSession }}{{ end }}"
+                },
+                {
                     "background": "#d75f00",
                     "foreground": "#D6DEEB",
                     "leading_diamond": "\ue0b2",
