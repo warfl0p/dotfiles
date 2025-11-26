@@ -65,6 +65,9 @@ if ! command -v nvim &> /dev/null; then
     sudo pacman -S --noconfirm neovim
 fi
 
+# Install dependencies for fzf widgets
+sudo pacman -S --noconfirm fzf fd bat git
+
 # Install Homebrew packages (preserve your original Brew installs)
 brew install uv
 brew install fzf

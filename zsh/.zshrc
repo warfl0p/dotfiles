@@ -131,7 +131,22 @@ activate() {
     fi
 }
 mem_usage() {
-top -b -n 1 | awk 'NR>7 {arr[$12]+=$6} END {for (i in arr) printf "%-60s %.2f GB\n", i, arr[i]/1024/1024}' | sort -nk2 | tail -n 20
+    echo "Per-process memory usage (top 20):"
+    # Calculate per-process usage and store in array
+    usage=$(top -b -n 1 | awk 'NR>7 {arr[$12]+=$6} END {for (i in arr) printf "%-60s %.2f\n", i, arr[i]/1024/1024}')
+    
+    # Print top 20
+    echo "$usage" | sort -nk2 | tail -n 20
+
+    # Sum all processes
+    total_used=$(echo "$usage" | awk '{sum+=$2} END {printf "%.2f", sum}')
+    
+    # Total system memory from /proc/meminfo
+    total_mem=$(awk '/MemTotal/ {printf "%.2f", $2/1024/1024}' /proc/meminfo)
+
+    echo ""
+    echo "Total RAM used by processes: $total_used GB"
+    echo "Total system RAM: $total_mem GB"
 }
 
 # auto start ssh
@@ -185,3 +200,82 @@ if [ -z "$TMUX" ]; then
   bindkey -s '^A' 'tmux attach -t matthias 2>/dev/null || (cd ~ && tmux new -s home)\n'
 fi
 
+# Omarchy custom functions
+
+# fzf file/directory search widget (Ctrl+Alt+F)
+fzf-file-widget() {
+  local fd_cmd=$(command -v fdfind || command -v fd || echo "fd")
+  local current_token="${LBUFFER##* }"
+  local expanded_token=""
+  if [[ -n "$current_token" ]]; then
+    expanded_token=$(eval echo "$current_token" 2>/dev/null || echo "$current_token")
+  fi
+
+  local selected
+  if [[ "$expanded_token" == */ ]] && [[ -d "$expanded_token" ]]; then
+    selected=$($fd_cmd --color=always --base-directory="$expanded_token" 2>/dev/null | \
+      fzf --multi --ansi --prompt="Directory $expanded_token> " \
+        --preview="[[ -d $expanded_token{} ]] && ls -lah $expanded_token{} || bat --color=always --style=numbers $expanded_token{} 2>/dev/null || cat $expanded_token{}")
+    [[ -n "$selected" ]] && selected="${expanded_token}${selected}"
+  else
+    selected=$($fd_cmd --color=always 2>/dev/null | \
+      fzf --multi --ansi --prompt="Directory> " --query="$expanded_token" \
+        --preview="[[ -d {} ]] && ls -lah {} || bat --color=always --style=numbers {} 2>/dev/null || cat {}")
+  fi
+
+  if [[ -n "$selected" ]]; then
+    selected=$(printf '%q' "$selected")
+    LBUFFER="${LBUFFER%$current_token}${selected} "
+  fi
+  zle reset-prompt
+}
+zle -N fzf-file-widget
+bindkey '^[^F' fzf-file-widget  # Ctrl+Alt+F
+
+# fzf git log search widget (Ctrl+Alt+L)
+fzf-git-log-widget() {
+  if ! git rev-parse --git-dir >/dev/null 2>&1; then
+    echo "Not in a git repository." >&2
+    return 1
+  fi
+
+  local selected
+  selected=$(git log --no-show-signature --color=always \
+    --format='%C(bold blue)%h%C(reset) - %C(cyan)%ad%C(reset) %C(yellow)%d%C(reset) %C(normal)%s%C(reset)  %C(dim normal)[%an]%C(reset)' \
+    --date=short | \
+    fzf --ansi --multi --scheme=history --prompt="Git Log> " \
+      --preview='git show --color=always --stat --patch {1}' \
+      --preview-window=right:50%:wrap | \
+    awk '{print $1}' | \
+    xargs -I {} git rev-parse {} 2>/dev/null | \
+    tr '\n' ' ')
+
+  if [[ -n "$selected" ]]; then
+    LBUFFER="${LBUFFER}${selected}"
+  fi
+  zle reset-prompt
+}
+zle -N fzf-git-log-widget
+bindkey '^[^L' fzf-git-log-widget  # Ctrl+Alt+L
+
+# fzf variables search widget (Ctrl+V)
+fzf-variables-widget() {
+  local current_token="${LBUFFER##* }"
+  local cleaned_token="${current_token#\$}"
+
+  local selected
+  selected=$(typeset -p | awk '{print $1, $2}' | sort -u | awk '{print $2}' | \
+    fzf --multi --prompt="Variables> " --preview-window=wrap \
+      --preview='echo {} && typeset -p {} 2>/dev/null || echo "No details available"' \
+      --query="$cleaned_token")
+
+  if [[ -n "$selected" ]]; then
+    if [[ "$current_token" == \$* ]]; then
+      selected="\$${selected}"
+    fi
+    LBUFFER="${LBUFFER%$current_token}${selected} "
+  fi
+  zle reset-prompt
+}
+zle -N fzf-variables-widget
+bindkey '^V' fzf-variables-widget  # Ctrl+V
