@@ -81,7 +81,7 @@ fi
 if ! command -v tms &> /dev/null; then
     brew install tmux-sessionizer
     mkdir -p ~/github
-    tms config ~/github
+    tms config -p ~/github
 fi
 
 # fzf-tab
