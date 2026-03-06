@@ -118,6 +118,10 @@ zstyle ':completion:*' menu no # remove default completion menu, because we are 
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
+## open command in vim
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey '^e' edit-command-line
 # Aliases
 alias ls='ls --color'
 alias c='clear'
@@ -158,6 +162,11 @@ fi
 if [ -f ~/.ssh/bitbucket_work ]; then
   ssh-add -q ~/.ssh/bitbucket_work >/dev/null 2>&1
 fi
+# Start ssh-agent if not running and add your key
+if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+    eval "$(ssh-agent -s)"
+    ssh-add ~/unraidVM_publickey
+fi
 
 
 
@@ -168,8 +177,6 @@ eval "$(uv generate-shell-completion zsh)"
 
 
 
-# add golang path
-export PATH=$PATH:/usr/local/go/bin
 # allow for ctr+arrow keys navigation
 ### ctrl+arrows
 bindkey "\e[1;5C" forward-word
@@ -195,42 +202,42 @@ bindkey "\e[3@" kill-line
 fpath+=~/.zfunc; autoload -Uz compinit; compinit
 
 
-if [ -z "$TMUX" ]; then
-  # Ctrl+A outside tmux → start/attach tmux session in ~
-  bindkey -s '^A' 'tmux attach -t matthias 2>/dev/null || (cd ~ && tmux new -s home)\n'
-fi
+function sesh-sessions() {
+  {
+    exec </dev/tty
+    exec <&1
 
-# Omarchy custom functions
+    local session
+    session=$(
+      sesh list -i |
+        fzf \
+          --ansi \
+          --height 40% \
+          --reverse \
+          --border \
+          --border-label ' sesh ' \
+          --prompt '⚡  '
+    )
 
-# fzf file/directory search widget (Ctrl+Alt+F)
-fzf-file-widget() {
-  local fd_cmd=$(command -v fdfind || command -v fd || echo "fd")
-  local current_token="${LBUFFER##* }"
-  local expanded_token=""
-  if [[ -n "$current_token" ]]; then
-    expanded_token=$(eval echo "$current_token" 2>/dev/null || echo "$current_token")
-  fi
-
-  local selected
-  if [[ "$expanded_token" == */ ]] && [[ -d "$expanded_token" ]]; then
-    selected=$($fd_cmd --color=always --base-directory="$expanded_token" 2>/dev/null | \
-      fzf --multi --ansi --prompt="Directory $expanded_token> " \
-        --preview="[[ -d $expanded_token{} ]] && ls -lah $expanded_token{} || bat --color=always --style=numbers $expanded_token{} 2>/dev/null || cat $expanded_token{}")
-    [[ -n "$selected" ]] && selected="${expanded_token}${selected}"
-  else
-    selected=$($fd_cmd --color=always 2>/dev/null | \
-      fzf --multi --ansi --prompt="Directory> " --query="$expanded_token" \
-        --preview="[[ -d {} ]] && ls -lah {} || bat --color=always --style=numbers {} 2>/dev/null || cat {}")
-  fi
-
-  if [[ -n "$selected" ]]; then
-    selected=$(printf '%q' "$selected")
-    LBUFFER="${LBUFFER%$current_token}${selected} "
-  fi
-  zle reset-prompt
+    zle reset-prompt > /dev/null 2>&1 || true
+    [[ -z "$session" ]] && return
+    sesh connect "$session"
+  }
 }
-zle -N fzf-file-widget
-bindkey '^[^F' fzf-file-widget  # Ctrl+Alt+F
+
+zle -N sesh-sessions
+bindkey -M emacs '\es' sesh-sessions
+bindkey -M vicmd '\es' sesh-sessions
+bindkey -M viins '\es' sesh-sessions
+
+# Bind Ctrl+A to run: sesh connect 'home (~)'
+_sesh_home() {
+  BUFFER="sesh connect 'home (~)'"
+  zle accept-line
+}
+zle -N _sesh_home
+bindkey '^A' _sesh_home
+# Omarchy custom functions
 
 # fzf git log search widget (Ctrl+Alt+L)
 fzf-git-log-widget() {
@@ -279,3 +286,4 @@ fzf-variables-widget() {
 }
 zle -N fzf-variables-widget
 bindkey '^V' fzf-variables-widget  # Ctrl+V
+
