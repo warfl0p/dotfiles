@@ -8,7 +8,7 @@ startup_command = "yazi"
 
 [[session]]
 name = "Obsidian"
-path = "~/Nextcloud/Documents - Nextcloud/Obsidian/"
+path = "~/Seafile/Obsidian/"
 startup_command = "nvim ."
 
 [[session]]
@@ -24,7 +24,7 @@ startup_command = "nvim ~/.config/sesh/sesh.toml"
 [[session]]
 name = "hello_teacher"
 path = "~/github/hello_teacher/"
-windows = [ "air", "minio",  "postgres"]
+windows = [ "air", "minio",  "postgres", "translate"]
 
 [[window]]
 name = "postgres"
@@ -38,6 +38,9 @@ startup_script = "air"
 name = "minio"
 startup_script = "minio server ~/minio-data --address :9000 --console-address :9001"
 
+[[window]]
+name = "translate"
+startup_script = "uvx libretranslate --host 0.0.0.0 --port 5000"
 
 
 [[session]]

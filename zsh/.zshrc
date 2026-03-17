@@ -134,24 +134,7 @@ activate() {
         echo "Error: .venv/bin/activate not found in the current directory."
     fi
 }
-mem_usage() {
-    echo "Per-process memory usage (top 20):"
-    # Calculate per-process usage and store in array
-    usage=$(top -b -n 1 | awk 'NR>7 {arr[$12]+=$6} END {for (i in arr) printf "%-60s %.2f\n", i, arr[i]/1024/1024}')
-    
-    # Print top 20
-    echo "$usage" | sort -nk2 | tail -n 20
-
-    # Sum all processes
-    total_used=$(echo "$usage" | awk '{sum+=$2} END {printf "%.2f", sum}')
-    
-    # Total system memory from /proc/meminfo
-    total_mem=$(awk '/MemTotal/ {printf "%.2f", $2/1024/1024}' /proc/meminfo)
-
-    echo ""
-    echo "Total RAM used by processes: $total_used GB"
-    echo "Total system RAM: $total_mem GB"
-}
+alias mem_usage='dgop'
 
 # auto start ssh
 # Start ssh-agent if not running and add SSH key
@@ -287,3 +270,4 @@ fzf-variables-widget() {
 zle -N fzf-variables-widget
 bindkey '^V' fzf-variables-widget  # Ctrl+V
 
+export PATH=$PATH:$(go env GOPATH)/bin
