@@ -207,3 +207,4 @@ _sesh_home() {
 }
 zle -N _sesh_home
 bindkey '^A' _sesh_home
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
