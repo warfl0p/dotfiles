@@ -21,7 +21,7 @@ apt_has_package() {
 
 echo "Updating apt and installing base dependencies..."
 sudo apt update
-sudo apt install -y unzip stow curl git tmux tree
+sudo apt install -y unzip stow curl git tmux tree libpq-dev build-essential
 
 # Install Zsh
 install_apt_if_missing zsh
