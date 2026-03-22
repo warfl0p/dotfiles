@@ -22,17 +22,23 @@ zinit light-mode for \
 
 ### End of Zinit's installer chunk
 # Shell integrations
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+export PATH="$HOME/.local/bin:$PATH"
 
 # fzf ctrl r
-source <(fzf --zsh)
+if command -v fzf >/dev/null 2>&1; then
+    source <(fzf --zsh)
+fi
 # [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # fzf-tab plugin
-source ~/.zsh_plugins/fzf-tab/fzf-tab.plugin.zsh
+if [ -f ~/.zsh_plugins/fzf-tab/fzf-tab.plugin.zsh ]; then
+    source ~/.zsh_plugins/fzf-tab/fzf-tab.plugin.zsh
+fi
 
 # ohmy posh
 export PATH="$HOME/bin:$PATH"
-eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/themes/custom_kushal.omp.json)"
+if command -v oh-my-posh >/dev/null 2>&1; then
+    eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/themes/custom_kushal.omp.json)"
+fi
 
 # Add in zsh plugins
 zinit light zsh-users/zsh-syntax-highlighting
@@ -106,7 +112,9 @@ bindkey -s '^A' 'sesh connect $HOME^M'
 # remove unwanted suggestions
 zstyle ':completion:*:complete:-command-:*:*' ignored-patterns '*.dll|*.exe|*.so|*.pyd'
 # add uv zsh completions
-eval "$(uv generate-shell-completion zsh)"
+if command -v uv >/dev/null 2>&1; then
+    eval "$(uv generate-shell-completion zsh)"
+fi
 
 
 
