@@ -104,7 +104,7 @@ fi
 
 # Stow dotfiles
 cd "$DOTFILES_DIR"
-stow -t ~ git tmux posh zsh nvim
+stow -t ~ tmux posh zsh nvim
 
 source ~/.zshrc
 
