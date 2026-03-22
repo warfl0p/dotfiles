@@ -92,11 +92,6 @@ fi
 # Stow dotfiles
 cd "$DOTFILES_DIR"
 
-STOW_TARGETS=(tmux posh zsh nvim)
-for target in "${STOW_TARGETS[@]}"; do
-    if [ -d "$target" ]; then
-        stow -t "$HOME" "$target"
-    fi
-done
+stow -t ~ tmux posh zsh nvim
 
 echo "Done! Restart your shell or log out and back in."
