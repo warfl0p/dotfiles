@@ -70,6 +70,7 @@ fi
 
 # Install Homebrew packages
 brew install uv
+brew install television
 brew install fzf
 brew install neovim
 brew install sesh

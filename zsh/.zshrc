@@ -25,9 +25,7 @@ zinit light-mode for \
 export PATH="$HOME/.local/bin:$PATH"
 
 # fzf ctrl r
-if command -v fzf >/dev/null 2>&1; then
-    source <(fzf --zsh)
-fi
+eval "$(tv init zsh)"
 # [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # fzf-tab plugin
 if [ -f ~/.zsh_plugins/fzf-tab/fzf-tab.plugin.zsh ]; then
@@ -139,23 +137,6 @@ activate() {
     fi
 }
 alias mem_usage='dgop'
-
-# auto start ssh
-# Start ssh-agent if not running and add SSH key
-if ! pgrep -u "$USER" ssh-agent > /dev/null; then
-  eval "$(ssh-agent -s)" >/dev/null 2>&1
-fi
-
-if [ -f ~/.ssh/bitbucket_work ]; then
-  ssh-add -q ~/.ssh/bitbucket_work >/dev/null 2>&1
-fi
-# Start ssh-agent if not running and add your key
-if ! pgrep -u "$USER" ssh-agent > /dev/null; then
-    eval "$(ssh-agent -s)"
-    ssh-add ~/unraidVM_publickey
-fi
-
-
 
 # remove unwanted suggestions
 zstyle ':completion:*:complete:-command-:*:*' ignored-patterns '*.dll|*.exe|*.so|*.pyd'
