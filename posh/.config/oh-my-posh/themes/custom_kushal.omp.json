@@ -6,6 +6,15 @@
             "alignment": "left",
             "segments": [
                 {
+                    "type": "session",
+                    "style": "diamond",
+                    "foreground": "#ffffff",
+                    "background": "#c386f1",
+                    "leading_diamond": "",
+                    "template": " ",
+                    "enabled": "{{ .SSHSession }}"
+                },
+                {
                     "background": "#d75f00",
                     "foreground": "#D6DEEB",
                     "leading_diamond": "\ue0b2",
@@ -29,15 +38,6 @@
                     "style": "diamond",
                     "template": "{{ .Icon }} ",
                     "type": "os"
-                },
-                {
-                    "type": "session",
-                    "style": "diamond",
-                    "foreground": "#ffffff",
-                    "background": "#F3AE35",
-                    "leading_diamond": "<transparent,background>\ue0b0</>",
-                    "trailing_diamond": "",
-                    "template": "{{ if .SSHSession }} {{ end }}"
                 },
                 {
                     "background": "#3f3f3f",
