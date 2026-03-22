@@ -30,6 +30,16 @@ source <(fzf --zsh)
 # fzf-tab plugin
 source ~/.zsh_plugins/fzf-tab/fzf-tab.plugin.zsh
 
+export FZF_CTRL_R_OPTS="$(
+	cat <<'FZF_FTW'
+--bind "ctrl-d:execute-silent(zsh -ic 'builtin fc -p $HISTFILE $HISTSIZE $SAVEHIST; for i in {+1}; do ignore+=( \"${(b)history[$i]}\" );done;
+	HISTORY_IGNORE=\"(${(j:|:)ignore})\";builtin fc -W $HISTFILE')+reload:builtin fc -p $HISTFILE $HISTSIZE $SAVEHIST; builtin fc -rl 1 |
+	awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, \"\", cmd); if (!seen[cmd]++) print $0 }'"
+--bind 'enter:accept-or-print-query'
+--header 'enter select · ^d remove'
+--prompt ' Global History > '
+FZF_FTW
+)"
 modified-fzf-history-widget() {
   local selected
   setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases no_bash_rematch 2> /dev/null
@@ -58,16 +68,6 @@ zle -N modified-fzf-history-widget
 bindkey "^R" modified-fzf-history-widget
 
 
-export FZF_CTRL_R_OPTS="$(
-	cat <<'FZF_FTW'
---bind "ctrl-d:execute-silent(zsh -ic 'builtin fc -p $HISTFILE $HISTSIZE $SAVEHIST; for i in {+1}; do ignore+=( \"${(b)history[$i]}\" );done;
-	HISTORY_IGNORE=\"(${(j:|:)ignore})\";builtin fc -W $HISTFILE')+reload:builtin fc -p $HISTFILE $HISTSIZE $SAVEHIST; builtin fc -rl 1 |
-	awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, \"\", cmd); if (!seen[cmd]++) print $0 }'"
---bind 'enter:accept-or-print-query'
---header 'enter select · ^d remove'
---prompt ' Global History > '
-FZF_FTW
-)"
 
 # History
 export HISTSIZE=12000
@@ -270,4 +270,4 @@ fzf-variables-widget() {
 zle -N fzf-variables-widget
 bindkey '^V' fzf-variables-widget  # Ctrl+V
 
-export PATH=$PATH:$(go env GOPATH)/bin
+export PATH=/home/matthias/.local/share/mise/installs/go/1.26.0/bin:$PATH
