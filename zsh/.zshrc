@@ -25,7 +25,6 @@ zinit light-mode for \
 export PATH="$HOME/.local/bin:$PATH"
 
 # fzf ctrl r
-eval "$(tv init zsh)"
 # [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # fzf-tab plugin
 if [ -f ~/.zsh_plugins/fzf-tab/fzf-tab.plugin.zsh ]; then
@@ -208,3 +207,4 @@ _sesh_home() {
 zle -N _sesh_home
 bindkey '^A' _sesh_home
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+eval "$(tv init zsh)"
