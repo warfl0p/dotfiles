@@ -11,6 +11,11 @@ name = "Obsidian"
 path = "~/Seafile/Obsidian/"
 startup_command = "nvim ."
 
+
+[[session]]
+name = "dotfiles_git"
+path = "~/github/dotfiles/"
+
 [[session]]
 name = "home (~)"
 path = "~"
@@ -47,3 +52,15 @@ startup_script = "uvx libretranslate --host 0.0.0.0 --port 5000"
 name = "tmux"
 path = "~/dotfiles/tmux/.config/tmux/"
 startup_command = "nvim tmux.conf"
+
+[[session]]
+name = "cpms_migration_v2"
+path = "~/github/cpms_migration_v2/"
+windows = [ "ssh"]
+
+[[window]]
+name = "ssh"
+startup_script = "clear && sshpass -f /tmp/mobilityplus_pw ssh sysadmin@10.211.76.5"
+
+
+
