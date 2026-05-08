@@ -56,11 +56,13 @@ startup_command = "nvim tmux.conf"
 [[session]]
 name = "cpms_migration_v2"
 path = "~/github/cpms_migration_v2/"
-windows = [ "ssh"]
+windows = [ "ssh", "prefect"]
 
 [[window]]
 name = "ssh"
-startup_script = "clear && sshpass -f /tmp/mobilityplus_pw ssh sysadmin@10.211.76.5"
+startup_script = "clear && ssh sysadmin@10.211.76.5"
 
-
+[[window]]
+name="prefect"
+startup_script = "uv run prefect server start"
 

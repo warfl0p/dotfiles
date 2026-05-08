@@ -1,4 +1,4 @@
-### Added by Zinit's installer
+# ─── Zinit Bootstrap ──────────────────────────────────────────────────────────
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
     print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
     command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
@@ -11,30 +11,23 @@ source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
-
-# Load a few important annexes, without Turbo
-# (this is currently required for annexes)
+# Annexes (required before plugins)
 zinit light-mode for \
     zdharma-continuum/zinit-annex-as-monitor \
     zdharma-continuum/zinit-annex-bin-gem-node \
     zdharma-continuum/zinit-annex-patch-dl \
     zdharma-continuum/zinit-annex-rust
 
-### End of Zinit's installer chunk
-# Shell integrations
+# ─── Environment ──────────────────────────────────────────────────────────────
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+export PATH=$PATH:/home/matthias/bin
+export PATH=$HOME/.npm-global/bin:$PATH
+export PATH=/home/matthias/.local/share/mise/installs/go/1.26.0/bin:$PATH
 
-# fzf ctrl r
-source <(fzf --zsh)
-# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-# fzf-tab plugin
-source ~/.zsh_plugins/fzf-tab/fzf-tab.plugin.zsh
-
-# History
+# ─── History ──────────────────────────────────────────────────────────────────
 export HISTSIZE=12000
 export SAVEHIST=10000
 export HISTFILE="${ZDOTDIR:-$HOME}"/.zsh_history
-# HISTFILE=~/.zsh_history
 HISTDUP=erase
 setopt appendhistory
 setopt SHARE_HISTORY
@@ -44,115 +37,149 @@ setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
 
-
-# ohmy posh
-export PATH=$PATH:/home/matthias/bin
+# ─── Prompt ───────────────────────────────────────────────────────────────────
 eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/themes/custom_kushal.omp.json)"
 
-# Add in zsh plugins
+# ─── Plugins & Snippets ───────────────────────────────────────────────────────
 zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
 
-# Add in snippets
 zinit snippet OMZL::git.zsh
 zinit snippet OMZP::git
 zinit snippet OMZP::sudo
 zinit snippet OMZP::archlinux
 zinit snippet OMZP::command-not-found
+zinit snippet OMZP::colored-man-pages
 
-# Load completions
+# ─── Completions ──────────────────────────────────────────────────────────────
+# fpath additions must come before compinit
+fpath+=~/.zfunc
+
 autoload -Uz compinit && compinit
-
-
 zinit cdreplay -q
 
-# Keybindings
+# uv shell completions
+eval "$(uv generate-shell-completion zsh)"
+
+# ─── Keybindings ──────────────────────────────────────────────────────────────
 bindkey -e
 bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
 bindkey '^[w' kill-region
-
-# Completion styling
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}' # make completion case-insensitive
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}" # colorize completions
-zstyle ':completion:*' menu no # remove default completion menu, because we are using fzf
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
-zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
-
-
-## open command in vim
-autoload -U edit-command-line
-zle -N edit-command-line
 bindkey '^e' edit-command-line
-# Aliases
-alias ls='ls --color'
-alias c='clear'
 
-# activate virtual environment
-activate() {
-    if [ -f .venv/bin/activate ]; then
-        source .venv/bin/activate
-    else
-        echo "Error: .venv/bin/activate not found in the current directory."
-    fi
-}
-alias mem_usage='dgop'
-
-# auto start ssh
-# Start ssh-agent if not running and add SSH key
-if ! pgrep -u "$USER" ssh-agent > /dev/null; then
-  eval "$(ssh-agent -s)" >/dev/null 2>&1
-fi
-
-if [ -f ~/.ssh/bitbucket_work ]; then
-  ssh-add -q ~/.ssh/bitbucket_work >/dev/null 2>&1
-fi
-# Start ssh-agent if not running and add your key
-if ! pgrep -u "$USER" ssh-agent > /dev/null; then
-    eval "$(ssh-agent -s)"
-    ssh-add ~/unraidVM_publickey
-fi
-
-
-
-# remove unwanted suggestions
-zstyle ':completion:*:complete:-command-:*:*' ignored-patterns '*.dll|*.exe|*.so|*.pyd'
-# add uv zsh completions
-eval "$(uv generate-shell-completion zsh)"
-
-
-
-# allow for ctr+arrow keys navigation
-### ctrl+arrows
+# ctrl+arrow navigation
 bindkey "\e[1;5C" forward-word
 bindkey "\e[1;5D" backward-word
-# urxvt
-bindkey "\eOc" forward-word
-bindkey "\eOd" backward-word
+bindkey "\eOc" forward-word   # urxvt
+bindkey "\eOd" backward-word  # urxvt
 
-### ctrl+delete
+# ctrl+delete
 bindkey "\e[3;5~" kill-word
-# urxvt
-bindkey "\e[3^" kill-word
+bindkey "\e[3^" kill-word     # urxvt
 
-### ctrl+backspace
+# ctrl+backspace
 bindkey '^H' backward-kill-word
 
-### ctrl+shift+delete
+# ctrl+shift+delete
 bindkey "\e[3;6~" kill-line
-# urxvt
-bindkey "\e[3@" kill-line
+bindkey "\e[3@" kill-line     # urxvt
 
-# typer autocompletes for optimile project
-fpath+=~/.zfunc; autoload -Uz compinit; compinit
+# edit command in vim
+autoload -U edit-command-line
+zle -N edit-command-line
 
+# ─── Completion Styling ───────────────────────────────────────────────────────
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' menu no
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
+zstyle ':completion:*:complete:-command-:*:*' ignored-patterns '*.dll|*.exe|*.so|*.pyd'
 
+# ─── fzf ──────────────────────────────────────────────────────────────────────
+source <(fzf --zsh)
+source ~/.zsh_plugins/fzf-tab/fzf-tab.plugin.zsh
+
+export FZF_CTRL_R_OPTS="$(
+    cat <<'FZF_FTW'
+--bind "ctrl-d:execute-silent(zsh -ic 'builtin fc -p $HISTFILE $HISTSIZE $SAVEHIST; for i in {+1}; do ignore+=( \"${(b)history[$i]}\" );done;
+    HISTORY_IGNORE=\"(${(j:|:)ignore})\";builtin fc -W $HISTFILE')+reload:builtin fc -p $HISTFILE $HISTSIZE $SAVEHIST; builtin fc -rl 1 |
+    awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, \"\", cmd); if (!seen[cmd]++) print $0 }'"
+--bind 'enter:accept-or-print-query'
+--header 'enter select · ^d remove'
+--prompt ' Global History > '
+FZF_FTW
+)"
+
+modified-fzf-history-widget() {
+  local selected
+  setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases no_bash_rematch 2>/dev/null
+  builtin fc -AI $HISTFILE
+  builtin fc -p $HISTFILE $HISTSIZE $SAVEHIST
+  selected="$(builtin fc -rl 1 |
+    awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", cmd); if (!seen[cmd]++) print $0 }' |
+    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} ${FZF_DEFAULT_OPTS-} -n2..,.. --scheme=history --bind=ctrl-r:toggle-sort,ctrl-z:ignore ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER} --multi" $(__fzfcmd))"
+  local ret=$?
+  if [[ -n $selected ]]; then
+    if [[ "$selected" =~ ^[[:blank:]]*[[:digit:]]+ ]]; then
+      builtin fc -pa "$HISTFILE"
+      zle vi-fetch-history -n "$MATCH"
+    else
+      LBUFFER="$selected"
+    fi
+  fi
+  builtin fc -R $HISTFILE
+  zle reset-prompt
+  return $ret
+}
+zle -N modified-fzf-history-widget
+bindkey "^R" modified-fzf-history-widget
+
+fzf-git-log-widget() {
+  if ! git rev-parse --git-dir >/dev/null 2>&1; then
+    echo "Not in a git repository." >&2
+    return 1
+  fi
+  local selected
+  selected=$(git log --no-show-signature --color=always \
+    --format='%C(bold blue)%h%C(reset) - %C(cyan)%ad%C(reset) %C(yellow)%d%C(reset) %C(normal)%s%C(reset)  %C(dim normal)[%an]%C(reset)' \
+    --date=short | \
+    fzf --ansi --multi --scheme=history --prompt="Git Log> " \
+      --preview='git show --color=always --stat --patch {1}' \
+      --preview-window=right:50%:wrap | \
+    awk '{print $1}' | \
+    xargs -I {} git rev-parse {} 2>/dev/null | \
+    tr '\n' ' ')
+  [[ -n "$selected" ]] && LBUFFER="${LBUFFER}${selected}"
+  zle reset-prompt
+}
+zle -N fzf-git-log-widget
+bindkey '^[^L' fzf-git-log-widget  # Ctrl+Alt+L
+
+fzf-variables-widget() {
+  local current_token="${LBUFFER##* }"
+  local cleaned_token="${current_token#\$}"
+  local selected
+  selected=$(typeset -p | awk '{print $1, $2}' | sort -u | awk '{print $2}' | \
+    fzf --multi --prompt="Variables> " --preview-window=wrap \
+      --preview='echo {} && typeset -p {} 2>/dev/null || echo "No details available"' \
+      --query="$cleaned_token")
+  if [[ -n "$selected" ]]; then
+    [[ "$current_token" == \$* ]] && selected="\$${selected}"
+    LBUFFER="${LBUFFER%$current_token}${selected} "
+  fi
+  zle reset-prompt
+}
+zle -N fzf-variables-widget
+bindkey '^V' fzf-variables-widget
+
+# ─── sesh ─────────────────────────────────────────────────────────────────────
 function sesh-sessions() {
   {
     exec </dev/tty
     exec <&1
-
     local session
     session=$(
       sesh list -i |
@@ -164,114 +191,45 @@ function sesh-sessions() {
           --border-label ' sesh ' \
           --prompt '⚡  '
     )
-
-    zle reset-prompt > /dev/null 2>&1 || true
+    zle reset-prompt >/dev/null 2>&1 || true
     [[ -z "$session" ]] && return
     sesh connect "$session"
   }
 }
-
 zle -N sesh-sessions
 bindkey -M emacs '\es' sesh-sessions
 bindkey -M vicmd '\es' sesh-sessions
 bindkey -M viins '\es' sesh-sessions
 
-# Bind Ctrl+A to run: sesh connect 'home (~)'
 _sesh_home() {
   BUFFER="sesh connect 'home (~)'"
   zle accept-line
 }
 zle -N _sesh_home
 bindkey '^A' _sesh_home
-# Omarchy custom functions
 
-# fzf git log search widget (Ctrl+Alt+L)
-fzf-git-log-widget() {
-  if ! git rev-parse --git-dir >/dev/null 2>&1; then
-    echo "Not in a git repository." >&2
-    return 1
+# ─── Aliases ──────────────────────────────────────────────────────────────────
+alias ls='ls --color'
+alias c='clear'
+alias mem_usage='dgop'
+
+# ─── Functions ────────────────────────────────────────────────────────────────
+# Activate local .venv
+activate() {
+  if [ -f .venv/bin/activate ]; then
+    source .venv/bin/activate
+  else
+    echo "Error: .venv/bin/activate not found in the current directory."
   fi
-
-  local selected
-  selected=$(git log --no-show-signature --color=always \
-    --format='%C(bold blue)%h%C(reset) - %C(cyan)%ad%C(reset) %C(yellow)%d%C(reset) %C(normal)%s%C(reset)  %C(dim normal)[%an]%C(reset)' \
-    --date=short | \
-    fzf --ansi --multi --scheme=history --prompt="Git Log> " \
-      --preview='git show --color=always --stat --patch {1}' \
-      --preview-window=right:50%:wrap | \
-    awk '{print $1}' | \
-    xargs -I {} git rev-parse {} 2>/dev/null | \
-    tr '\n' ' ')
-
-  if [[ -n "$selected" ]]; then
-    LBUFFER="${LBUFFER}${selected}"
-  fi
-  zle reset-prompt
 }
-zle -N fzf-git-log-widget
-bindkey '^[^L' fzf-git-log-widget  # Ctrl+Alt+L
 
-# fzf variables search widget (Ctrl+V)
-fzf-variables-widget() {
-  local current_token="${LBUFFER##* }"
-  local cleaned_token="${current_token#\$}"
+# ─── SSH Agent ────────────────────────────────────────────────────────────────
+if ! pgrep -u "$USER" ssh-agent >/dev/null; then
+  eval "$(ssh-agent -s)" >/dev/null 2>&1
+fi
+[[ -f ~/.ssh/bitbucket_work ]] && ssh-add -q ~/.ssh/bitbucket_work >/dev/null 2>&1
+[[ -f ~/unraidVM_publickey ]]  && ssh-add -q ~/unraidVM_publickey  >/dev/null 2>&1
 
-  local selected
-  selected=$(typeset -p | awk '{print $1, $2}' | sort -u | awk '{print $2}' | \
-    fzf --multi --prompt="Variables> " --preview-window=wrap \
-      --preview='echo {} && typeset -p {} 2>/dev/null || echo "No details available"' \
-      --query="$cleaned_token")
-
-  if [[ -n "$selected" ]]; then
-    if [[ "$current_token" == \$* ]]; then
-      selected="\$${selected}"
-    fi
-    LBUFFER="${LBUFFER%$current_token}${selected} "
-  fi
-  zle reset-prompt
-}
-zle -N fzf-variables-widget
-bindkey '^V' fzf-variables-widget  # Ctrl+V
-
-export PATH=/home/matthias/.local/share/mise/installs/go/1.26.0/bin:$PATH
-export FZF_CTRL_R_OPTS="$(
-	cat <<'FZF_FTW'
---bind "ctrl-d:execute-silent(zsh -ic 'builtin fc -p $HISTFILE $HISTSIZE $SAVEHIST; for i in {+1}; do ignore+=( \"${(b)history[$i]}\" );done;
-	HISTORY_IGNORE=\"(${(j:|:)ignore})\";builtin fc -W $HISTFILE')+reload:builtin fc -p $HISTFILE $HISTSIZE $SAVEHIST; builtin fc -rl 1 |
-	awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, \"\", cmd); if (!seen[cmd]++) print $0 }'"
---bind 'enter:accept-or-print-query'
---header 'enter select · ^d remove'
---prompt ' Global History > '
-FZF_FTW
-)"
-modified-fzf-history-widget() {
-  local selected
-  setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases no_bash_rematch 2> /dev/null
-  # appends the current shell history buffer to the HISTFILE
-  builtin fc -AI $HISTFILE
-  # pushes entries from the $HISTFILE onto a stack and uses this history
-  builtin fc -p $HISTFILE $HISTSIZE $SAVEHIST
-  selected="$(builtin fc -rl 1 |
-    awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", cmd); if (!seen[cmd]++) print $0 }' |
-    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} ${FZF_DEFAULT_OPTS-} -n2..,.. --scheme=history --bind=ctrl-r:toggle-sort,ctrl-z:ignore ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER} --multi" $(__fzfcmd))"
-  local ret=$?
-	if [[ -n $selected ]]; then
-    if [[ "$selected" =~ ^[[:blank:]]*[[:digit:]]+ ]]; then
-	  builtin fc -pa "$HISTFILE"
-	  zle vi-fetch-history -n "$MATCH"
-    else # selected is a custom query, not from history
-      LBUFFER="$selected"
-    fi
-  fi
-  # Read the history from the history file into the history list
-  builtin fc -R $HISTFILE
-  zle reset-prompt
-  return $ret
-}
-zle -N modified-fzf-history-widget
-bindkey "^R" modified-fzf-history-widget
-
-# must be after compinit
+# ─── Integrations (must be last) ──────────────────────────────────────────────
 eval "$(zoxide init zsh)"
-# add omarchy functions
 source ~/.local/share/omarchy/default/bash/fns/tmux
