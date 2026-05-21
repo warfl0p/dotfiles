@@ -14,15 +14,10 @@ end, {
 })
 
 -- ctrl+backspace in insert mode
--- vim.keymap.set("i", "<C-BS>", "<C-W>", { noremap = true, silent = true })
-
+vim.keymap.set("i", "<C-h>", "<C-w>", { noremap = true, silent = true })
 
 -- Open current file in Obsidian via URI
 vim.keymap.set("n", "<leader>o", function()
-  local vault_name = "Obsidian"                                        -- replace with your vault name
-  local file_path = vim.fn.expand("%:p")                               -- absolute path
-  local uri = "obsidian://open?path=" .. vim.fn.escape(file_path, " ") -- encode spaces minimally
-  -- OR better, encode all URI components properly:
   local function urlencode(str)
     if str then
       str = str:gsub("([^%w%-._~])", function(c)
@@ -31,8 +26,6 @@ vim.keymap.set("n", "<leader>o", function()
     end
     return str
   end
-  -- local obs_uri = "obsidian://open?vault=" ..
-  --     urlencode(vault_name) .. "&file=" .. urlencode(vim.fn.expand("%:p:h") .. "/" .. vim.fn.expand("%:t"))
   local obs_uri = "obsidian://open?path=" .. urlencode(vim.fn.expand("%:p:h") .. "/" .. vim.fn.expand("%:t"))
 
   -- open URI

@@ -176,6 +176,7 @@ zle -N fzf-variables-widget
 bindkey '^V' fzf-variables-widget
 
 # ─── sesh ─────────────────────────────────────────────────────────────────────
+# alt S top open session picker
 function sesh-sessions() {
   {
     exec </dev/tty
@@ -201,13 +202,26 @@ bindkey -M emacs '\es' sesh-sessions
 bindkey -M vicmd '\es' sesh-sessions
 bindkey -M viins '\es' sesh-sessions
 
+# ctrl A to open home session
 _sesh_home() {
   BUFFER="sesh connect 'home (~)'"
   zle accept-line
 }
 zle -N _sesh_home
 bindkey '^A' _sesh_home
+# alt L to open last session
+sesh-last-session() {
+  {
+    exec </dev/tty
+    exec <&1
+    sesh last
+  }
+}
 
+zle -N sesh-last-session
+bindkey -M emacs '\el' sesh-last-session
+bindkey -M vicmd '\el' sesh-last-session
+bindkey -M viins '\el' sesh-last-session
 # ─── Aliases ──────────────────────────────────────────────────────────────────
 alias ls='ls --color'
 alias c='clear'
@@ -233,3 +247,4 @@ fi
 # ─── Integrations (must be last) ──────────────────────────────────────────────
 eval "$(zoxide init zsh)"
 source ~/.local/share/omarchy/default/bash/fns/tmux
+export PATH="$HOME/.local/bin:$PATH"
