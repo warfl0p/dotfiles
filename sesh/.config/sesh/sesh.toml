@@ -1,3 +1,4 @@
+#:schema https://github.com/joshmedeski/sesh/raw/main/sesh.schema.json
 [default_session]
 preview_command = "eza --all --git --icons --color=always {}"
 
@@ -29,7 +30,7 @@ startup_command = "nvim ~/.config/sesh/sesh.toml"
 [[session]]
 name = "hello_teacher"
 path = "~/github/hello_teacher/"
-windows = [ "air", "minio",  "postgres", "translate"]
+windows = ["air", "minio", "postgres", "translate"]
 
 [[window]]
 name = "postgres"
@@ -56,13 +57,12 @@ startup_command = "nvim tmux.conf"
 [[session]]
 name = "cpms_migration_v2"
 path = "~/github/cpms_migration_v2/"
-windows = [ "ssh", "prefect"]
+windows = ["ssh", "prefect"]
 
 [[window]]
 name = "ssh"
 startup_script = "clear && ssh sysadmin@10.211.76.5"
 
 [[window]]
-name="prefect"
+name = "prefect"
 startup_script = "uv run prefect server start"
-
