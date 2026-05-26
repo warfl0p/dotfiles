@@ -51,4 +51,4 @@ args = ["--login"]
 [[keyboard.bindings]]
 key = "Back"
 mods = "Control"
-chars = "\x17"
+chars = "\u0017"
