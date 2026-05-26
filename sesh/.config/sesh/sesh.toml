@@ -15,7 +15,7 @@ startup_command = "nvim ."
 
 [[session]]
 name = "dotfiles_git"
-path = "~/github/dotfiles/"
+path = "~/Projects/dotfiles/"
 
 [[session]]
 name = "home (~)"
@@ -29,7 +29,7 @@ startup_command = "nvim ~/.config/sesh/sesh.toml"
 
 [[session]]
 name = "hello_teacher"
-path = "~/github/hello_teacher/"
+path = "~/Projects/hello_teacher/"
 windows = ["air", "minio", "postgres", "translate"]
 
 [[window]]
@@ -56,7 +56,7 @@ startup_command = "nvim tmux.conf"
 
 [[session]]
 name = "cpms_migration_v2"
-path = "~/github/cpms_migration_v2/"
+path = "~/Projects/cpms_migration_v2/"
 windows = ["ssh", "prefect"]
 
 [[window]]
