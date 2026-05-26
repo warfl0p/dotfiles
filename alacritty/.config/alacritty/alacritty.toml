@@ -48,6 +48,7 @@ osc52 = "CopyPaste"
 program = "/usr/bin/zsh"
 args = ["--login"]
 
+# make ctrl backspace send ctrl+d for claude
 [[keyboard.bindings]]
 key = "Back"
 mods = "Control"
