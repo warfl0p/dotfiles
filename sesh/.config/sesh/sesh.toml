@@ -33,8 +33,8 @@ path = "~/Projects/hello_teacher/"
 windows = ["air", "minio", "postgres", "translate"]
 
 [[window]]
-name = "postgres"
-startup_script = "psql -U postgres -d hello_teacher"
+name = "ssh"
+startup_script = "ssh matthias@unraidvm"
 
 [[window]]
 name = "air"
@@ -48,6 +48,9 @@ startup_script = "minio server ~/minio-data --address :9000 --console-address :9
 name = "translate"
 startup_script = "uvx libretranslate --host 0.0.0.0 --port 5000"
 
+[[window]]
+name = "postgres"
+startup_script = "psql -U postgres -d hello_teacher"
 
 [[session]]
 name = "tmux"

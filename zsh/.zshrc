@@ -226,6 +226,7 @@ bindkey -M viins '\el' sesh-last-session
 alias ls='ls --color'
 alias c='clear'
 alias mem_usage='dgop'
+alias cal='cal -m -w -y'
 
 # ─── Functions ────────────────────────────────────────────────────────────────
 # Activate local .venv
@@ -248,3 +249,7 @@ fi
 eval "$(zoxide init zsh)"
 source ~/.local/share/omarchy/default/bash/fns/tmux
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/go/bin:$PATH"
+
+# Resend CLI
+export PATH="$HOME/.resend/bin:$PATH"
