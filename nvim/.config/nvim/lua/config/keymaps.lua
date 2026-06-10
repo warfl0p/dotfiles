@@ -16,6 +16,11 @@ end, {
 -- ctrl+backspace in insert mode
 vim.keymap.set("i", "<C-h>", "<C-w>", { noremap = true, silent = true })
 
+-- Alt+l to switch to last tmux/sesh session (mirrors zsh sesh-last-session widget)
+vim.keymap.set({ "n", "i", "v", "t" }, "<M-l>", function()
+  vim.fn.jobstart("sesh last", { detach = true })
+end, { desc = "Switch to last sesh session", noremap = true, silent = true })
+
 -- Open current file in Obsidian via URI
 vim.keymap.set("n", "<leader>o", function()
   local function urlencode(str)

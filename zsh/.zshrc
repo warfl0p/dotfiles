@@ -253,3 +253,18 @@ export PATH="$HOME/go/bin:$PATH"
 
 # Resend CLI
 export PATH="$HOME/.resend/bin:$PATH"
+
+svg-unwrap() {
+  python3 -c "
+import re, base64, sys
+path = sys.argv[1]
+h = open(path).read()
+m = re.search(r'base64,([A-Za-z0-9+/=]+)', h)
+if not m:
+    print('No base64 SVG found in', path); sys.exit(1)
+open(path, 'wb').write(base64.b64decode(m.group(1)))
+print('Done:', path)
+" "$1" && touch "$1"
+}
+
+fpath+=~/.zfunc; autoload -Uz compinit; compinit
