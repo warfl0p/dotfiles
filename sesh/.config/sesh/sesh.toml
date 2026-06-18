@@ -30,10 +30,10 @@ startup_command = "nvim ~/.config/sesh/sesh.toml"
 [[session]]
 name = "hello_teacher"
 path = "~/Projects/hello_teacher/"
-windows = ["air", "minio", "postgres", "translate"]
+windows = ["ssh2", "air", "minio", "postgres", "translate"]
 
 [[window]]
-name = "ssh"
+name = "ssh2"
 startup_script = "ssh matthias@unraidvm"
 
 [[window]]
@@ -60,10 +60,10 @@ startup_command = "nvim tmux.conf"
 [[session]]
 name = "cpms_migration_v2"
 path = "~/Projects/cpms_migration_v2/"
-windows = ["ssh", "prefect"]
+windows = ["ssh1", "prefect"]
 
 [[window]]
-name = "ssh"
+name = "ssh1"
 startup_script = "clear && ssh sysadmin@10.211.76.5"
 
 [[window]]
