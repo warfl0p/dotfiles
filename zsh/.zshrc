@@ -228,6 +228,11 @@ alias c='clear'
 alias mem_usage='dgop'
 alias cal='cal -m -w -y'
 
+unalias gd 2>/dev/null
+gd() {
+  git diff "$@" | diffnav
+}
+
 # ─── Functions ────────────────────────────────────────────────────────────────
 # Activate local .venv
 activate() {

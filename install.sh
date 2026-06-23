@@ -67,6 +67,7 @@ fi
 
 # Install dependencies for fzf widgets
 sudo pacman -S --noconfirm fzf fd bat git
+# git-delta-git (AUR) — install via omarchy/yay: provides delta for improved diffs
 
 # Install Homebrew packages (preserve your original Brew installs)
 brew install uv
@@ -81,6 +82,6 @@ fi
 
 # Stow dotfiles
 cd "$DOTFILES_DIR"
-stow -t ~ git tmux posh zsh nvim sesh alacritty misc
+stow -t ~ git tmux posh zsh nvim sesh alacritty misc bat
 
 echo "Done! Restart your shell or log out and back in."

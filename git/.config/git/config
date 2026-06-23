@@ -1,0 +1,49 @@
+[user]
+	email = matthias.warlop@hotmail.be
+	name = warfl0p
+
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+
+[credential "https://github.com"]
+	helper =
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !/usr/bin/gh auth git-credential
+[credential]
+	helper = cache --timeout=2592000
+
+[core]
+	pager = delta
+	sshCommand = ssh -o LogLevel=ERROR
+
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	navigate = true
+	side-by-side = false
+	line-numbers = true
+	hyperlinks = true
+	file-style = bold yellow
+	file-decoration-style = none
+	file-modified-label = ""
+
+[status]
+	showUntrackedFiles = all
+
+[init]
+	defaultBranch = main
+
+[pull]
+	rebase = true
+
+[merge]
+	conflictstyle = zdiff3
+
+[diff]
+	colorMoved = default
