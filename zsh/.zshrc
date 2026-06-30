@@ -102,6 +102,8 @@ zstyle ':completion:*:complete:-command-:*:*' ignored-patterns '*.dll|*.exe|*.so
 source <(fzf --zsh)
 source ~/.zsh_plugins/fzf-tab/fzf-tab.plugin.zsh
 
+export FZF_CTRL_T_OPTS="--preview 'if [ -d {} ]; then ls -A --color=always {}; else bat --color=always --style=numbers --line-range=:200 {}; fi'"
+
 export FZF_CTRL_R_OPTS="$(
     cat <<'FZF_FTW'
 --bind "ctrl-d:execute-silent(zsh -ic 'builtin fc -p $HISTFILE $HISTSIZE $SAVEHIST; for i in {+1}; do ignore+=( \"${(b)history[$i]}\" );done;
@@ -242,6 +244,13 @@ activate() {
     echo "Error: .venv/bin/activate not found in the current directory."
   fi
 }
+
+fkilljob() {
+  local job
+  job=$(jobs | fzf | sed -E 's/^\[([0-9]+)\].*/\1/') || return
+  kill -9 %"$job"
+}
+
 
 # ─── SSH Agent ────────────────────────────────────────────────────────────────
 if ! pgrep -u "$USER" ssh-agent >/dev/null; then
