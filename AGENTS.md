@@ -2,10 +2,10 @@
 
 Personal dotfiles for Arch Linux managed with [GNU Stow](https://www.gnu.org/software/stow/). Each top-level directory is a stow package that symlinks into `~` (or `~/.config/`).
 
+
 ## Structure
 
 ```
-dotfiles/
 ├── alacritty/   # Alacritty terminal config (imports omarchy theme)
 ├── bat/         # bat syntax definitions (custom tmux.sublime-syntax for previews)
 ├── git/         # Global .gitconfig

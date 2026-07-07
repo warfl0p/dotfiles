@@ -25,7 +25,10 @@
 	diffFilter = delta --color-only
 
 [delta]
-	navigate = true
+  dark = true
+  plus-style = syntax "#123d12"
+  plus-emph-style = syntax "#2d7d2d"
+  navigate = true
 	side-by-side = false
 	line-numbers = true
 	hyperlinks = true
