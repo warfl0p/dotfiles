@@ -1,0 +1,166 @@
+#!/bin/bash
+#
+# alarm — set silent desktop-notification alarms via systemd user timers.
+#
+#   alarm 13:30                 Alarm at 13:30 today (or tomorrow if past)
+#   alarm 13:30 "Stand up"      ...with a custom message
+#   alarm +20m "Tea"            Relative: 20 minutes from now
+#   alarm +1h30m                Relative: combine h/m/s
+#   alarm list                  Show pending alarms
+#   alarm cancel <id>           Cancel one alarm (id from `alarm list`)
+#   alarm cancel all            Cancel every alarm
+#
+# Notifications are shown via Mako (no sound). Each alarm is a one-shot
+# systemd --user timer that cleans itself up after firing.
+
+set -euo pipefail
+
+PROG=${0##*/}
+STATE_DIR="${XDG_RUNTIME_DIR:-/tmp}/alarms"
+NOTIFY_URGENCY="critical" # stays on screen until dismissed; still silent
+mkdir -p "$STATE_DIR"
+
+# Pick a notifier: prefer omarchy's (silent Mako), fall back to notify-send.
+notify_cmd() {
+  if command -v omarchy-notification-send >/dev/null 2>&1; then
+    omarchy-notification-send "󰔛" "$1" "$2" -u "$NOTIFY_URGENCY"
+  else
+    notify-send -u "$NOTIFY_URGENCY" "$1" "$2"
+  fi
+}
+
+usage() {
+  sed -n '3,14p' "$0" | sed 's/^# \{0,1\}//'
+  exit "${1:-0}"
+}
+
+die() {
+  echo "$PROG: $*" >&2
+  exit 1
+}
+
+# Convert a time argument into "seconds from now".
+#   +<dur>   -> relative (e.g. +20m, +1h30m, +90s)
+#   HH:MM    -> next occurrence of that clock time
+delay_seconds() {
+  local arg=$1 now target
+  now=$(date +%s)
+
+  if [[ $arg == +* ]]; then
+    local spec=${arg#+} total=0 num unit
+    [[ $spec =~ ^([0-9]+[hms])+$ ]] || die "bad relative time: '$arg' (try +20m, +1h30m, +90s)"
+    while [[ $spec =~ ^([0-9]+)([hms])(.*)$ ]]; do
+      num=${BASH_REMATCH[1]}
+      unit=${BASH_REMATCH[2]}
+      spec=${BASH_REMATCH[3]}
+      case $unit in
+      h) total=$((total + num * 3600)) ;;
+      m) total=$((total + num * 60)) ;;
+      s) total=$((total + num)) ;;
+      esac
+    done
+    ((total > 0)) || die "duration must be greater than zero"
+    echo "$total"
+    return
+  fi
+
+  target=$(date -d "$arg" +%s 2>/dev/null) || die "could not understand time: '$arg'"
+  ((target <= now)) && target=$(date -d "tomorrow $arg" +%s)
+  echo "$((target - now))"
+}
+
+cmd_set() {
+  local when=${1:-}
+  [[ -n $when ]] || usage 1
+  shift || true
+  local message="$*"
+
+  local delay
+  delay=$(delay_seconds "$when")
+
+  local fire_epoch fire_at unit prefix
+  fire_epoch=$(date -d "+${delay} seconds" +%s)
+  fire_at=$(date -d "@$fire_epoch" '+%Y-%m-%d %H:%M')
+  [[ -n $message ]] || message="Alarm ($(date -d "@$fire_epoch" +%-H:%M))"
+
+  unit="alarm-$(date +%s)-$$"
+  prefix="$STATE_DIR/$unit"
+  printf '%s' "$message" >"$prefix.msg"
+  printf '%s' "$fire_epoch" >"$prefix.at"
+
+  # One-shot: --on-active fires once; --collect unloads the unit afterward.
+  # The message is passed as $0; $1 is the state-file prefix to clean up.
+  systemd-run --user --quiet --collect \
+    --on-active="${delay}s" \
+    --unit="$unit" \
+    --timer-property=AccuracySec=1s \
+    bash -c 'src="$0"; command -v omarchy-notification-send >/dev/null 2>&1 \
+        && omarchy-notification-send "󰔛" "Alarm" "$src" -u "'"$NOTIFY_URGENCY"'" \
+        || notify-send -u "'"$NOTIFY_URGENCY"'" "Alarm" "$src"; rm -f "$1".msg "$1".at' \
+    "$message" "$prefix"
+
+  echo "⏰ Alarm set for $fire_at  —  \"$message\""
+  echo "   (id: $unit)"
+}
+
+cmd_list() {
+  local rows
+  rows=$(systemctl --user list-timers --all --no-legend --no-pager 'alarm-*.timer' 2>/dev/null || true)
+  if [[ -z ${rows//[[:space:]]/} ]]; then
+    echo "No alarms set."
+    return
+  fi
+  printf '%-16s  %s\n' "WHEN" "MESSAGE"
+  while read -r line; do
+    [[ -z $line ]] && continue
+    local unit base next msg
+    unit=$(awk '{print $(NF-1)}' <<<"$line")
+    base="$STATE_DIR/${unit%.timer}"
+    if [[ -f "$base.at" ]]; then
+      next=$(date -d "@$(<"$base.at")" '+%a %H:%M')
+    else
+      next="?"
+    fi
+    msg=""
+    [[ -f "$base.msg" ]] && msg=$(<"$base.msg")
+    printf '%-16s  %s\n' "$next" "${msg:-(no message)}"
+    printf '   id: %s\n' "${unit%.timer}"
+  done <<<"$rows"
+}
+
+cmd_cancel() {
+  local target=${1:-}
+  [[ -n $target ]] || die "usage: $PROG cancel <id|all>"
+
+  if [[ $target == all ]]; then
+    local units
+    units=$(systemctl --user list-timers --all --no-legend --no-pager 'alarm-*.timer' 2>/dev/null | awk '{print $(NF-1)}')
+    if [[ -z ${units//[[:space:]]/} ]]; then
+      echo "No alarms to cancel."
+      return
+    fi
+    xargs -r systemctl --user stop <<<"$units"
+    rm -f "$STATE_DIR"/alarm-*.msg "$STATE_DIR"/alarm-*.at
+    echo "Cancelled all alarms."
+    return
+  fi
+
+  local unit=${target%.timer}
+  systemctl --user stop "$unit.timer" 2>/dev/null || die "no such alarm: $target"
+  rm -f "$STATE_DIR/$unit.msg" "$STATE_DIR/$unit.at"
+  echo "Cancelled $unit."
+}
+
+case ${1:-} in
+"" | -h | --help | help) usage 0 ;;
+list | ls) cmd_list ;;
+cancel | rm | stop)
+  shift
+  cmd_cancel "$@"
+  ;;
+set)
+  shift
+  cmd_set "$@"
+  ;;
+*) cmd_set "$@" ;; # bare `alarm 13:30 ...`
+esac

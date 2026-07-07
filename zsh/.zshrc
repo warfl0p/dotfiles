@@ -144,12 +144,18 @@ fzf-git-log-widget() {
     echo "Not in a git repository." >&2
     return 1
   fi
+  local current_token="${LBUFFER##* }"
+  local ref=""
+  if [[ -n "$current_token" ]] && git rev-parse --verify --quiet "$current_token" >/dev/null 2>&1; then
+    ref="$current_token"
+    LBUFFER="${LBUFFER%$current_token}"
+  fi
   local selected
   selected=$(git log --no-show-signature --color=always \
     --format='%C(bold blue)%h%C(reset) - %C(cyan)%ad%C(reset) %C(yellow)%d%C(reset) %C(normal)%s%C(reset)  %C(dim normal)[%an]%C(reset)' \
-    --date=short | \
-    fzf --ansi --multi --scheme=history --prompt="Git Log> " \
-      --preview='git show --color=always --stat --patch {1}' \
+    --date=short ${ref} | \
+    fzf --ansi --multi --scheme=history --prompt="Git Log${ref:+ ($ref)}> " \
+      --preview='git show --color=always --stat --patch {1} | delta --dark --paging=never' \
       --preview-window=right:50%:wrap | \
     awk '{print $1}' | \
     xargs -I {} git rev-parse {} 2>/dev/null | \

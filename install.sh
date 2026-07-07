@@ -82,6 +82,6 @@ fi
 
 # Stow dotfiles
 cd "$DOTFILES_DIR"
-stow -t ~ git tmux posh zsh nvim sesh alacritty misc bat hypr
+stow -t ~ git tmux posh zsh nvim sesh alacritty misc bat hypr bin
 
 echo "Done! Restart your shell or log out and back in."
