@@ -75,6 +75,9 @@ bindkey "\e[1;5D" backward-word
 bindkey "\eOc" forward-word   # urxvt
 bindkey "\eOd" backward-word  # urxvt
 
+# delete
+bindkey "\e[3~" delete-char
+
 # ctrl+delete
 bindkey "\e[3;5~" kill-word
 bindkey "\e[3^" kill-word     # urxvt
@@ -232,6 +235,7 @@ bindkey -M vicmd '\el' sesh-last-session
 bindkey -M viins '\el' sesh-last-session
 # ─── Aliases ──────────────────────────────────────────────────────────────────
 alias ls='ls --color'
+alias cat='bat'
 alias c='clear'
 alias mem_usage='dgop'
 alias cal='cal -m -w -y'

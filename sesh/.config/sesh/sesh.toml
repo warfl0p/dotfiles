@@ -55,8 +55,8 @@ startup_command = "nvim tmux.conf"
 preview_command = "bat -l tmux --color=always ~/.config/tmux/tmux.conf"
 
 [[session]]
-name = "cpms_migration_framework"
-path = "~/Projects/cpms_migration_framework/"
+name = "mobilityplus-migrations"
+path = "~/Projects/mobilityplus-migration/"
 windows = ["ssh1", "prefect"]
 
 [[window]]

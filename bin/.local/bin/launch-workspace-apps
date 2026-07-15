@@ -1,0 +1,14 @@
+#!/bin/bash
+# Launches apps into their designated Hyprland workspaces.
+
+launch() {
+    local workspace="$1"
+    local cmd="$2"
+    hyprctl dispatch exec "[workspace $workspace silent] $cmd"
+}
+
+launch 1 "dbeaver"
+launch 2 "code"
+launch 3 "google-chrome-stable"
+launch 4 "/opt/google/chrome/google-chrome --profile-directory=Default --app-id=ompifgpmddkgmclendfeacglnodjjndh"
+launch 9 "spotify"
