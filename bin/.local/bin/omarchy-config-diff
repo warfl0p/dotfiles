@@ -1,0 +1,79 @@
+#!/bin/bash
+#
+# omarchy-config-diff — diff your ~/.config against the shipped Omarchy defaults.
+#
+#   omarchy-config-diff            Diff every config Omarchy ships, viewed in diffnav
+#   omarchy-config-diff hypr       Diff just one shipped entry (e.g. hypr, git, btop)
+#   omarchy-config-diff --raw      Print the raw diff instead of piping into diffnav
+#
+# Walks $OMARCHY_PATH/config (the release's shipped defaults) and compares each
+# entry against the same path under ~/.config, using `git diff --no-index` so
+# added/removed/binary files are shown the way `git diff` would show them.
+
+set -uo pipefail
+
+PROG=${0##*/}
+OMARCHY_PATH="${OMARCHY_PATH:-/usr/share/omarchy}"
+SHIPPED="$OMARCHY_PATH/config"
+
+usage() {
+  sed -n '3,10p' "$0" | sed 's/^# \{0,1\}//'
+  exit "${1:-0}"
+}
+
+die() {
+  echo "$PROG: $*" >&2
+  exit 1
+}
+
+[[ -d $SHIPPED ]] || die "shipped config not found at $SHIPPED"
+
+raw=0
+filter=""
+for arg in "$@"; do
+  case $arg in
+  -h | --help) usage 0 ;;
+  --raw) raw=1 ;;
+  *) filter=$arg ;;
+  esac
+done
+
+diff_one() {
+  local shipped_path=$1 user_path=$2 real_path=$2
+
+  # git diff --no-index doesn't follow symlinks (e.g. stow-managed dotfiles),
+  # so compare against the real target file's content instead.
+  [[ -L $user_path ]] && real_path=$(readlink -f "$user_path")
+
+  if [[ -n $real_path && -e $real_path ]]; then
+    git diff --no-index --no-prefix -- "$shipped_path" "$real_path"
+  else
+    git diff --no-index --no-prefix -- "$shipped_path" /dev/null
+  fi
+}
+
+output=""
+found=0
+while IFS= read -r -d '' shipped_file; do
+  rel=${shipped_file#"$SHIPPED"/}
+  top=${rel%%/*}
+  [[ -n $filter && $top != "$filter" ]] && continue
+  found=1
+  out=$(diff_one "$shipped_file" "$HOME/.config/$rel")
+  [[ -n $out ]] && output+="$out"$'\n'
+done < <(find "$SHIPPED" -type f -print0 | sort -z)
+
+if [[ -n $filter && $found -eq 0 ]]; then
+  die "no shipped config named '$filter' in $SHIPPED"
+fi
+
+if [[ -z $output ]]; then
+  echo "No differences from shipped Omarchy defaults."
+  exit 0
+fi
+
+if [[ $raw -eq 1 ]]; then
+  printf '%s' "$output"
+else
+  printf '%s' "$output" | diffnav
+fi

@@ -29,7 +29,8 @@ fi
 if ! command -v brew &> /dev/null; then
     echo "Installing Homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.zshrc
+    # NB: do not append shellenv to ~/.zshrc here — the stowed .zshrc already
+    # evals it, and writing a real ~/.zshrc makes the stow step below abort.
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
@@ -70,8 +71,9 @@ sudo pacman -S --noconfirm fzf fd bat git
 # git-delta-git (AUR) — install via omarchy/yay: provides delta for improved diffs
 
 # Install Homebrew packages (preserve your original Brew installs)
-brew install uv
-brew install fzf
+for pkg in uv fzf; do
+    brew list --versions "$pkg" >/dev/null 2>&1 || brew install "$pkg"
+done
 
 # fzf-tab plugin
 FZF_TAB_DIR="$HOME/.zsh_plugins/fzf-tab"

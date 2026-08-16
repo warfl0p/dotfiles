@@ -1,1 +1,1 @@
-/home/matthias/.config/omarchy/current/theme/neovim.lua
+/home/matthias/.local/state/omarchy/current/theme/neovim.lua
