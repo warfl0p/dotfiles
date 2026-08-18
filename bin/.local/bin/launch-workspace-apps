@@ -4,7 +4,12 @@
 launch() {
     local workspace="$1"
     local cmd="$2"
-    hyprctl dispatch exec "[workspace $workspace silent] $cmd"
+    # Hyprland's dispatch IPC now evaluates its argument as Lua (native Lua
+    # config support), so the old "[workspace N silent] cmd" bracket-rule
+    # prefix no longer parses. Use the Lua exec_cmd rule table instead.
+    local escaped_cmd=${cmd//\\/\\\\}
+    escaped_cmd=${escaped_cmd//\"/\\\"}
+    hyprctl dispatch "hl.dsp.exec_cmd(\"$escaped_cmd\", { workspace = \"$workspace silent\" })"
 }
 
 launch 1 "dbeaver"
