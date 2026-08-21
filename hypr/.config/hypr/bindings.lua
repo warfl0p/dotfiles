@@ -90,3 +90,12 @@ hl.unbind("SUPER + ALT + TAB") -- was: Next window in group
 hl.unbind("SUPER + ALT + SHIFT + TAB") -- was: Previous window in group
 o.bind("SUPER + TAB", "Next window in group", hl.dsp.group.next())
 o.bind("SUPER + SHIFT + TAB", "Previous window in group", hl.dsp.group.prev())
+
+-- Snap volume up/down to multiples of 5 (~/.local/bin/omarchy-audio-output-volume
+-- wraps the system script). Bound by absolute path since the graphical
+-- session's PATH puts /usr/share/omarchy/bin ahead of ~/.local/bin, so a
+-- same-name override there would never be found by a bare command lookup.
+hl.unbind("XF86AudioRaiseVolume") -- was: Volume up
+hl.unbind("XF86AudioLowerVolume") -- was: Volume down
+o.bind("XF86AudioRaiseVolume", "Volume up", "~/.local/bin/omarchy-audio-output-volume raise", { locked = true, repeating = true })
+o.bind("XF86AudioLowerVolume", "Volume down", "~/.local/bin/omarchy-audio-output-volume lower", { locked = true, repeating = true })

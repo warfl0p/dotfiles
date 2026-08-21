@@ -1,0 +1,32 @@
+#!/bin/bash
+#
+# omarchy-audio-output-volume — wraps the system version to snap plain
+# raise/lower to multiples of 5, instead of drifting off-grid forever from
+# whatever percent the sink happened to start at (e.g. 31 -> 36 -> 41 ...).
+# ALT's precise +1/-1 and mute-toggle pass straight through untouched.
+
+real=/usr/share/omarchy/bin/omarchy-audio-output-volume
+action="${1:-}"
+
+if [[ $action == raise || $action == lower ]]; then
+  sink="$(omarchy-audio-output-sink)"
+  current="$(
+    pactl get-sink-volume "$sink" 2>/dev/null |
+      awk 'NR == 1 {
+        for (i = 1; i <= NF; i++)
+          if ($i ~ /%$/) {sub("%", "", $i); print $i; exit}
+      }'
+  )"
+
+  if [[ $current =~ ^[0-9]+$ ]]; then
+    if [[ $action == raise ]]; then
+      delta=$(((current / 5) * 5 + 5 - current))
+      exec "$real" "+$delta"
+    else
+      delta=$((current - ((current - 1) / 5) * 5))
+      exec "$real" "-$delta"
+    fi
+  fi
+fi
+
+exec "$real" "$@"
