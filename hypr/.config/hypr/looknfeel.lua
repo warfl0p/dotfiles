@@ -30,9 +30,8 @@ hl.config({
 })
 
 -- Omarchy applies slight transparency (opacity 0.985/0.96) to every window by
--- default. Keep terminals fully opaque instead.
-o.window("(Alacritty|kitty|foot)", { tag = "-default-opacity", opacity = "1 1" })
-o.window("com.mitchellh.ghostty", { tag = "-default-opacity", opacity = "1 1" })
+-- default. Keep everything fully opaque instead.
+o.window(".*", { tag = "-default-opacity", opacity = "1 1" })
 
 -- https://wiki.hypr.land/Configuring/Basics/Variables/#layout
 -- hl.config({

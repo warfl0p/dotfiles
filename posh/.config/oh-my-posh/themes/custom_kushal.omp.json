@@ -12,6 +12,7 @@
                     "properties": {
                         "alpine": "\uf300",
                         "arch": "\uf303",
+                        "omarchy": "\uf303",
                         "centos": "\uf304",
                         "debian": "\uf306",
                         "elementary": "\uf309",

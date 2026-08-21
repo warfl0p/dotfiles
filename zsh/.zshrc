@@ -119,6 +119,15 @@ gd() {
 }
 
 # ─── Functions ────────────────────────────────────────────────────────────────
+# `nvim` with no args opens the cwd; `nvim <args>` behaves normally
+nvim() {
+  if [ $# -eq 0 ]; then
+    command nvim .
+  else
+    command nvim "$@"
+  fi
+}
+
 # Activate local .venv
 activate() {
   if [ -f .venv/bin/activate ]; then
