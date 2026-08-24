@@ -23,13 +23,14 @@ zinit light-mode for \
 ### End of Zinit's installer chunk
 # Shell integrations
 export PATH="$HOME/.local/bin:$PATH"
+export EDITOR=nvim
+export VISUAL=nvim
 
-# fzf ctrl r
-# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-# fzf-tab plugin
-if [ -f ~/.zsh_plugins/fzf-tab/fzf-tab.plugin.zsh ]; then
-    source ~/.zsh_plugins/fzf-tab/fzf-tab.plugin.zsh
-fi
+# fzf ctrl-r — apt's fzf package ships shell integration under
+# /usr/share/doc/fzf/examples/; source it for __fzfcmd, which the custom
+# widget below depends on. The widget itself then overrides fzf's own
+# default ctrl-r binding.
+[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
 
 modified-fzf-history-widget() {
   local selected
@@ -74,7 +75,6 @@ FZF_FTW
 export HISTSIZE=12000
 export SAVEHIST=10000
 export HISTFILE="${ZDOTDIR:-$HOME}"/.zsh_history
-# HISTFILE=~/.zsh_history
 HISTDUP=erase
 setopt appendhistory
 setopt SHARE_HISTORY
@@ -84,10 +84,13 @@ setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
 
-
-# ohmy posh
-export PATH=$PATH:/home/matthias/bin
-eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/themes/custom_kushal.omp.json)"
+# Minimal built-in prompt — no external prompt engine, just zsh's own
+# vcs_info: user@host, cwd, git branch when inside a repo.
+autoload -Uz vcs_info
+precmd() { vcs_info }
+zstyle ':vcs_info:git:*' formats ' (%b)'
+setopt PROMPT_SUBST
+PROMPT='%F{cyan}%n@%m%f %F{blue}%~%f%F{yellow}${vcs_info_msg_0_}%f %# '
 
 # Add in zsh plugins
 zinit light zsh-users/zsh-syntax-highlighting
@@ -98,7 +101,6 @@ zinit light zsh-users/zsh-autosuggestions
 zinit snippet OMZL::git.zsh
 zinit snippet OMZP::git
 zinit snippet OMZP::sudo
-zinit snippet OMZP::archlinux
 zinit snippet OMZP::command-not-found
 
 # Load completions
@@ -115,36 +117,18 @@ bindkey '^[w' kill-region
 # Completion styling
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}' # make completion case-insensitive
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}" # colorize completions
-zstyle ':completion:*' menu no # remove default completion menu, because we are using fzf
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
-zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
 ## open command in vim
 autoload -U edit-command-line
 zle -N edit-command-line
 bindkey '^e' edit-command-line
+
 # Aliases
 alias ls='ls --color'
 alias c='clear'
 
-# activate virtual environment
-activate() {
-    if [ -f .venv/bin/activate ]; then
-        source .venv/bin/activate
-    else
-        echo "Error: .venv/bin/activate not found in the current directory."
-    fi
-}
-alias mem_usage='dgop'
-
 # remove unwanted suggestions
 zstyle ':completion:*:complete:-command-:*:*' ignored-patterns '*.dll|*.exe|*.so|*.pyd'
-# add uv zsh completions
-if command -v uv >/dev/null 2>&1; then
-    eval "$(uv generate-shell-completion zsh)"
-fi
-
-
 
 # allow for ctr+arrow keys navigation
 ### ctrl+arrows
@@ -166,45 +150,3 @@ bindkey '^H' backward-kill-word
 bindkey "\e[3;6~" kill-line
 # urxvt
 bindkey "\e[3@" kill-line
-
-# typer autocompletes for optimile project
-fpath+=~/.zfunc; autoload -Uz compinit; compinit
-
-
-function sesh-sessions() {
-  {
-    exec </dev/tty
-    exec <&1
-
-    local session
-    session=$(
-      sesh list -i |
-        fzf \
-          --ansi \
-          --height 40% \
-          --reverse \
-          --border \
-          --border-label ' sesh ' \
-          --prompt '⚡  '
-    )
-
-    zle reset-prompt > /dev/null 2>&1 || true
-    [[ -z "$session" ]] && return
-    sesh connect "$session"
-  }
-}
-
-zle -N sesh-sessions
-bindkey -M emacs '\es' sesh-sessions
-bindkey -M vicmd '\es' sesh-sessions
-bindkey -M viins '\es' sesh-sessions
-
-# Bind Ctrl+A to run: sesh connect 'home (~)'
-_sesh_home() {
-  BUFFER="sesh connect 'home (~)'"
-  zle accept-line
-}
-zle -N _sesh_home
-bindkey '^A' _sesh_home
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-eval "$(tv init zsh)"

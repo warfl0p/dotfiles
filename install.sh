@@ -1,4 +1,9 @@
 #!/bin/bash
+#
+# Minimal install for a server/VM: zsh, fzf (ctrl-r history search), and
+# Neovim. No Homebrew, no curl-pipe-bash installers, no third-party prompt
+# engine — everything here is either an Ubuntu apt package or a versioned
+# tarball straight from the upstream project's GitHub releases.
 
 set -euo pipefail
 
@@ -15,13 +20,13 @@ install_apt_if_missing() {
     fi
 }
 
-apt_has_package() {
-    apt-cache show "$1" >/dev/null 2>&1
-}
-
 echo "Updating apt and installing base dependencies..."
 sudo apt update
-sudo apt install -y unzip stow curl git tmux tree libpq-dev build-essential
+# gcc + make: LazyVim's treesitter parsers compile from source on :TSUpdate,
+# and some Mason-installed tools need a compiler too (see commit "required
+# compilers" on ubuntu_core). Not the full build-essential meta-package —
+# just the two binaries treesitter actually needs.
+sudo apt install -y unzip stow curl git tree gcc make
 
 # Install Zsh
 install_apt_if_missing zsh
@@ -36,62 +41,32 @@ else
     echo "Zsh is already the default shell."
 fi
 
-# Install Homebrew
-if ! command -v brew >/dev/null 2>&1; then
-    echo "Installing Homebrew..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-fi
+# fzf — Ubuntu's apt package, not Homebrew. Ships shell integration examples
+# (including the key-bindings script .zshrc sources for ctrl-r) at
+# /usr/share/doc/fzf/examples/.
+install_apt_if_missing fzf
 
-if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
-    if ! grep -Fq 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' "$HOME/.zshrc" 2>/dev/null; then
-        echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> "$HOME/.zshrc"
-    fi
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-fi
-
-# Install oh-my-posh
-if ! command -v oh-my-posh >/dev/null 2>&1; then
-    mkdir -p "$HOME/bin"
-    export PATH="$PATH:$HOME/bin"
-    curl -s https://ohmyposh.dev/install.sh | bash -s -- -d "$HOME/bin"
-    oh-my-posh font install meslo
-fi
-
-# Install Tmux + Catppuccin theme
-CATPUCCIN_DIR="$HOME/.config/tmux/plugins/catppuccin/tmux"
-if [ ! -d "$CATPUCCIN_DIR" ]; then
-    mkdir -p "$(dirname "$CATPUCCIN_DIR")"
-    git clone -b v2.1.3 https://github.com/catppuccin/tmux.git "$CATPUCCIN_DIR"
-fi
-
-if apt_has_package fd-find; then
-    install_apt_if_missing fd-find fdfind
-fi
-
-# Install Homebrew packages
-brew install uv
-brew install television
-brew install fzf
-brew install neovim
-brew install sesh
-
-# fzf-tab plugin
-FZF_TAB_DIR="$HOME/.zsh_plugins/fzf-tab"
-if [ ! -d "$FZF_TAB_DIR" ]; then
-    mkdir -p "$HOME/.zsh_plugins"
-    git clone https://github.com/Aloxaf/fzf-tab "$FZF_TAB_DIR"
-fi
-
-# Install TPM (Tmux Plugin Manager)
-TPM_DIR="$HOME/.tmux/plugins/tpm"
-if [ ! -d "$TPM_DIR" ]; then
-    mkdir -p "$(dirname "$TPM_DIR")"
-    git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
+# Neovim — Ubuntu's apt package lags well behind upstream releases, and this
+# LazyVim config wants a current version. Installing the official prebuilt
+# binary instead of adding a PPA or Homebrew: this is a plain tarball
+# download and extract, not a script being executed, so it doesn't carry the
+# curl-pipe-bash risk the old install.sh had for Homebrew/oh-my-posh.
+if ! command -v nvim >/dev/null 2>&1; then
+    echo "Installing Neovim..."
+    # Pinned to a specific release rather than "latest" so this install is
+    # reproducible — bump this URL to a newer tag when you want to upgrade.
+    NVIM_VERSION="v0.10.2"
+    curl -fsSL -o /tmp/nvim-linux-x86_64.tar.gz \
+        "https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim-linux-x86_64.tar.gz"
+    sudo rm -rf /opt/nvim
+    sudo tar -C /opt -xzf /tmp/nvim-linux-x86_64.tar.gz
+    sudo mv /opt/nvim-linux-x86_64 /opt/nvim
+    sudo ln -sf /opt/nvim/bin/nvim /usr/local/bin/nvim
+    rm /tmp/nvim-linux-x86_64.tar.gz
 fi
 
 # Stow dotfiles
 cd "$DOTFILES_DIR"
-
-stow -t ~ tmux posh zsh nvim
+stow -t ~ zsh nvim
 
 echo "Done! Restart your shell or log out and back in."
