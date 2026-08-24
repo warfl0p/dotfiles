@@ -60,22 +60,24 @@ sudo mkdir -p /usr/local/share/fzf
 sudo curl -fsSL -o /usr/local/share/fzf/key-bindings.zsh \
     "https://raw.githubusercontent.com/junegunn/fzf/v${FZF_VERSION}/shell/key-bindings.zsh"
 
-# Neovim — Ubuntu's apt package lags well behind upstream releases, and this
-# LazyVim config wants a current version. Installing the official prebuilt
-# binary instead of adding a PPA or Homebrew: this is a plain tarball
-# download and extract, not a script being executed, so it doesn't carry the
+# Neovim — Ubuntu's apt package is badly outdated (0.7.2 as of writing) and
+# this LazyVim config needs current. Installing the official prebuilt
+# binary instead of adding a PPA or Homebrew: a plain tarball download and
+# extract, not a script being executed, so it doesn't carry the
 # curl-pipe-bash risk the old install.sh had for Homebrew/oh-my-posh.
+#
+# Uses the "latest" release, not a pinned tag: a pinned v0.10.2 404'd here
+# because Neovim's asset filename changed across releases, and unlike fzf's
+# asset name (which embeds the version, so latest/download/ can't be used
+# without knowing it), Neovim's filename is constant across releases, which
+# is what makes the latest/download/<fixed-name> shortcut reliable for it.
 if ! command -v nvim >/dev/null 2>&1; then
     echo "Installing Neovim..."
-    # Pinned to a specific release rather than "latest" so this install is
-    # reproducible — bump this URL to a newer tag when you want to upgrade.
-    NVIM_VERSION="v0.10.2"
     curl -fsSL -o /tmp/nvim-linux-x86_64.tar.gz \
-        "https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim-linux-x86_64.tar.gz"
-    sudo rm -rf /opt/nvim
+        https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+    sudo rm -rf /opt/nvim-linux-x86_64
     sudo tar -C /opt -xzf /tmp/nvim-linux-x86_64.tar.gz
-    sudo mv /opt/nvim-linux-x86_64 /opt/nvim
-    sudo ln -sf /opt/nvim/bin/nvim /usr/local/bin/nvim
+    sudo ln -sf /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/nvim
     rm /tmp/nvim-linux-x86_64.tar.gz
 fi
 
