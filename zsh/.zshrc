@@ -26,11 +26,12 @@ export PATH="$HOME/.local/bin:$PATH"
 export EDITOR=nvim
 export VISUAL=nvim
 
-# fzf ctrl-r — apt's fzf package ships shell integration under
-# /usr/share/doc/fzf/examples/; source it for __fzfcmd, which the custom
-# widget below depends on. The widget itself then overrides fzf's own
-# default ctrl-r binding.
-[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
+# fzf ctrl-r — install.sh fetches this from fzf's own repo (pinned to the
+# same tag as the binary) for __fzfcmd, which the custom widget below
+# depends on. Not apt's copy: Ubuntu's fzf package is old enough to be
+# missing actions this config's --bind uses. The widget itself then
+# overrides fzf's own default ctrl-r binding.
+[ -f /usr/local/share/fzf/key-bindings.zsh ] && source /usr/local/share/fzf/key-bindings.zsh
 
 modified-fzf-history-widget() {
   local selected

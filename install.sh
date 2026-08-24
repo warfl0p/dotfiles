@@ -41,10 +41,24 @@ else
     echo "Zsh is already the default shell."
 fi
 
-# fzf — Ubuntu's apt package, not Homebrew. Ships shell integration examples
-# (including the key-bindings script .zshrc sources for ctrl-r) at
-# /usr/share/doc/fzf/examples/.
-install_apt_if_missing fzf
+# fzf — Ubuntu's apt package is old enough to be missing fzf actions this
+# config's ctrl-r binding uses ("unknown action: accept-or-print-query" on
+# the ~0.44 apt ships). Pull a pinned binary from upstream instead, same
+# reasoning as Neovim below — plus the shell integration script at the same
+# tag, since the release tarball only contains the binary, not that script,
+# and .zshrc's ctrl-r widget depends on __fzfcmd from it.
+FZF_VERSION="0.54.0"
+if ! command -v fzf >/dev/null 2>&1; then
+    echo "Installing fzf ${FZF_VERSION}..."
+    curl -fsSL -o /tmp/fzf.tar.gz \
+        "https://github.com/junegunn/fzf/releases/download/v${FZF_VERSION}/fzf-${FZF_VERSION}-linux_amd64.tar.gz"
+    tar -C /tmp -xzf /tmp/fzf.tar.gz
+    sudo mv /tmp/fzf /usr/local/bin/fzf
+    rm /tmp/fzf.tar.gz
+fi
+sudo mkdir -p /usr/local/share/fzf
+sudo curl -fsSL -o /usr/local/share/fzf/key-bindings.zsh \
+    "https://raw.githubusercontent.com/junegunn/fzf/v${FZF_VERSION}/shell/key-bindings.zsh"
 
 # Neovim — Ubuntu's apt package lags well behind upstream releases, and this
 # LazyVim config wants a current version. Installing the official prebuilt
