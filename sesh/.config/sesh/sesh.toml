@@ -26,27 +26,18 @@ preview_command = "bat --color=always ~/.config/sesh/sesh.toml"
 [[session]]
 name = "hello_teacher"
 path = "~/Projects/hello_teacher/"
-windows = ["ssh2", "air", "minio", "postgres", "translate"]
+windows = ["ssh2", "air"]
 
 [[window]]
 name = "ssh2"
-startup_script = "ssh matthias@unraidvm"
+startup_script = "ssh deploy@hello-teacher-ubuntu"
 
 [[window]]
 name = "air"
-startup_script = "air"
-
-[[window]]
-name = "minio"
-startup_script = "minio server ~/minio-data --address :9000 --console-address :9001"
-
-[[window]]
-name = "translate"
-startup_script = "uvx libretranslate --host 0.0.0.0 --port 5000"
-
-[[window]]
-name = "postgres"
-startup_script = "psql -U postgres -d hello_teacher"
+# MinIO + LibreTranslate run as daemonized Docker containers (dev/docker-compose.yml)
+# instead of foreground processes, so they don't need their own windows.
+# Postgres isn't part of that stack: it already runs as a host systemd service.
+startup_script = "docker compose -f dev/docker-compose.yml up -d && air"
 
 [[session]]
 name = "tmux"
@@ -55,7 +46,7 @@ startup_command = "nvim tmux.conf"
 preview_command = "bat -l tmux --color=always ~/.config/tmux/tmux.conf"
 
 [[session]]
-name = "mobilityplus-migrations"
+name = "mobilityplus-migration"
 path = "~/Projects/mobilityplus-migration/"
 windows = ["ssh1", "prefect"]
 
