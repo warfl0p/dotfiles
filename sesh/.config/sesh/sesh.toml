@@ -34,10 +34,7 @@ startup_script = "ssh deploy@hello-teacher-ubuntu"
 
 [[window]]
 name = "air"
-# MinIO + LibreTranslate run as daemonized Docker containers (dev/docker-compose.yml)
-# instead of foreground processes, so they don't need their own windows.
-# Postgres isn't part of that stack: it already runs as a host systemd service.
-startup_script = "docker compose -f dev/docker-compose.yml up -d && air"
+startup_script = "mprocs"
 
 [[session]]
 name = "tmux"

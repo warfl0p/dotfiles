@@ -2,12 +2,12 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
--- ctrl+p: VSCode-style Ctrl+P (MRU list, fuzzy-searches all files incl.
--- gitignored files like .env on type; see lua/plugins/snacks-picker-ctrlp.lua)
+-- ctrl+p: VSCode-style Ctrl+P via fff.nvim (frecency-ranked fuzzy file finder;
+-- recently/frequently opened files rank higher automatically, see lua/plugins/fff.lua)
 vim.keymap.set("n", "<C-p>", function()
-  Snacks.picker.smart()
+  require("fff").find_files()
 end, {
-  desc = "Find files (MRU + fuzzy, VSCode-style)",
+  desc = "Find files (frecency-ranked, VSCode-style)",
   noremap = true,
   silent = true,
 })
