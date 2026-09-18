@@ -54,3 +54,12 @@ startup_script = "clear && ssh sysadmin@10.211.76.5"
 [[window]]
 name = "prefect"
 startup_script = "uv run prefect server start"
+
+[[session]]
+name = "move"
+path = "~/Projects/move/"
+windows = ["ssh3"]
+
+[[window]]
+name = "ssh3"
+startup_script = "ssh deploy@move-migration"

@@ -115,7 +115,7 @@ alias cal='cal -m -w -y'
 
 unalias gd 2>/dev/null
 gd() {
-  git diff "$@" | diffnav
+  git diff "$@" -- . ':(exclude)*_templ.go' | diffnav --unified
 }
 
 # ─── Functions ────────────────────────────────────────────────────────────────
