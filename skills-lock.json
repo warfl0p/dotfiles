@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "sesh": {
+      "source": "joshmedeski/sesh",
+      "sourceType": "github",
+      "skillPath": "skills/sesh/SKILL.md",
+      "computedHash": "97f8ec054e690ec67564d6ee48e348fcf2d124911eea864a612e852832328138"
+    }
+  }
+}

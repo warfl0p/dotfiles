@@ -4,12 +4,19 @@ set -e
 
 DOTFILES_DIR="$HOME/dotfiles"
 
-sudo pacman -Syu --noconfirm stow
-# Install Zsh
-if ! command -v zsh &> /dev/null; then
-    echo "Installing Zsh..."
-    sudo pacman -S --noconfirm zsh
+if ! command -v omarchy &> /dev/null; then
+    echo "This installer expects an Omarchy system (omarchy not found on PATH)." >&2
+    exit 1
 fi
+
+# Packages go through omarchy so system upgrades stay behind `omarchy update`.
+# `omarchy pkg add` is idempotent: it skips packages that are already present.
+omarchy pkg add stow zsh alacritty neovim tmux fzf fd bat git uv github-cli \
+    zoxide eza jq tokei yazi diffnav
+omarchy pkg aur add sesh-bin
+
+# One ssh-agent for every shell; .zshrc points SSH_AUTH_SOCK at this socket
+systemctl --user enable --now ssh-agent.socket
 
 # Check current default shell
 CURRENT_SHELL=$(getent passwd "$USER" | cut -d: -f7)
@@ -18,20 +25,6 @@ if [[ "$CURRENT_SHELL" != "$(which zsh)" ]]; then
     chsh -s $(which zsh)
 else
     echo "Zsh is already the default shell."
-fi
-
-# Alacritty (repo version)
-if ! command -v alacritty &> /dev/null; then
-    sudo pacman -S --noconfirm alacritty
-fi
-
-# Install Homebrew
-if ! command -v brew &> /dev/null; then
-    echo "Installing Homebrew..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    # NB: do not append shellenv to ~/.zshrc here — the stowed .zshrc already
-    # evals it, and writing a real ~/.zshrc makes the stow step below abort.
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
 # Clone dotfiles
@@ -45,12 +38,10 @@ if ! command -v oh-my-posh &> /dev/null; then
     mkdir -p ~/bin
     export PATH="$PATH:$HOME/bin"
     curl -s https://ohmyposh.dev/install.sh | bash -s -- -d ~/bin
-    oh-my-posh font install meslo
 fi
 
-# Install GitHub CLI
-if ! command -v gh &> /dev/null; then
-    sudo pacman -S --noconfirm gh
+# Authenticate the GitHub CLI (interactive)
+if ! gh auth status &> /dev/null; then
     gh auth login
 fi
 
@@ -61,19 +52,8 @@ if [ ! -d "$CATPUCCIN_DIR" ]; then
     git clone -b v2.1.3 https://github.com/catppuccin/tmux.git "$CATPUCCIN_DIR"
 fi
 
-# Install Neovim
-if ! command -v nvim &> /dev/null; then
-    sudo pacman -S --noconfirm neovim
-fi
-
-# Install dependencies for fzf widgets
-sudo pacman -S --noconfirm fzf fd bat git
-# git-delta-git (AUR) — install via omarchy/yay: provides delta for improved diffs
-
-# Install Homebrew packages (preserve your original Brew installs)
-for pkg in uv fzf; do
-    brew list --versions "$pkg" >/dev/null 2>&1 || brew install "$pkg"
-done
+# delta for improved diffs (AUR)
+omarchy pkg aur add git-delta-git || echo "Skipping git-delta-git (AUR unavailable)"
 
 # fzf-tab plugin
 FZF_TAB_DIR="$HOME/.zsh_plugins/fzf-tab"
@@ -82,8 +62,20 @@ if [ ! -d "$FZF_TAB_DIR" ]; then
     git clone https://github.com/Aloxaf/fzf-tab "$FZF_TAB_DIR"
 fi
 
-# Stow dotfiles
+# Stow dotfiles. Omarchy ships real files at some of these paths (hypr, alacritty),
+# which makes stow abort, so move any non-symlink target aside as *.pre-stow first.
 cd "$DOTFILES_DIR"
-stow -t ~ git tmux posh zsh nvim sesh alacritty misc bat hypr bin foot
+PACKAGES=(git tmux posh zsh nvim sesh alacritty misc bat hypr bin)
+for pkg in "${PACKAGES[@]}"; do
+    while IFS= read -r -d '' file; do
+        target="$HOME/${file#"$pkg"/}"
+        # skip paths already served by the repo (stow may have linked a parent directory)
+        if [[ -e $target && $(realpath "$target") != "$DOTFILES_DIR"/* ]]; then
+            echo "Backing up $target -> $target.pre-stow"
+            mv "$target" "$target.pre-stow"
+        fi
+    done < <(find "$pkg" -type f -print0)
+done
+stow -t ~ "${PACKAGES[@]}"
 
 echo "Done! Restart your shell or log out and back in."

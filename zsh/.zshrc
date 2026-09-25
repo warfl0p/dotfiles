@@ -19,29 +19,25 @@ zinit light-mode for \
     zdharma-continuum/zinit-annex-rust
 
 # ─── Environment ──────────────────────────────────────────────────────────────
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 export PATH=$PATH:/home/matthias/bin
 export PATH=$HOME/.npm-global/bin:$PATH
-export PATH=/home/matthias/.local/share/mise/installs/go/1.26.0/bin:$PATH
+export PATH=$HOME/.local/share/mise/installs/go/latest/bin:$PATH  # mise keeps `latest` pointed at the newest install
 
 # ─── History ──────────────────────────────────────────────────────────────────
 export HISTSIZE=12000
 export SAVEHIST=10000
 export HISTFILE="${ZDOTDIR:-$HOME}"/.zsh_history
-HISTDUP=erase
 setopt appendhistory
 setopt SHARE_HISTORY
 setopt hist_ignore_space
 setopt hist_ignore_all_dups
 setopt hist_save_no_dups
-setopt hist_ignore_dups
 setopt hist_find_no_dups
 
 # ─── Prompt ───────────────────────────────────────────────────────────────────
 eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/themes/custom_kushal.omp.json)"
 
 # ─── Plugins & Snippets ───────────────────────────────────────────────────────
-zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
 
@@ -119,10 +115,10 @@ gd() {
 }
 
 # ─── Functions ────────────────────────────────────────────────────────────────
-# `nvim` with no args opens the cwd; `nvim <args>` behaves normally
+# `nvim` with no args restores this dir's session and opens Neo-tree; `nvim <args>` behaves normally
 nvim() {
   if [ $# -eq 0 ]; then
-    command nvim .
+    command nvim -c 'lua require("persistence").load()' -c 'Neotree show'
   else
     command nvim "$@"
   fi
@@ -147,11 +143,8 @@ source ~/.config/zsh/ghlang.zsh
 
 
 # ─── SSH Agent ────────────────────────────────────────────────────────────────
-if ! pgrep -u "$USER" ssh-agent >/dev/null; then
-  eval "$(ssh-agent -s)" >/dev/null 2>&1
-fi
-[[ -f ~/.ssh/bitbucket_work ]] && ssh-add -q ~/.ssh/bitbucket_work >/dev/null 2>&1
-[[ -f ~/unraidVM_publickey ]]  && ssh-add -q ~/unraidVM_publickey  >/dev/null 2>&1
+# systemd user agent (ssh-agent.socket, enabled by install.sh): one agent shared by every shell
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 
 # ─── Integrations (must be last) ──────────────────────────────────────────────
 eval "$(zoxide init zsh)"
@@ -161,4 +154,5 @@ export PATH="$HOME/go/bin:$PATH"
 # Resend CLI
 export PATH="$HOME/.resend/bin:$PATH"
 
-fpath+=~/.zfunc; autoload -Uz compinit; compinit
+# must be sourced after every other widget is defined
+zinit light zsh-users/zsh-syntax-highlighting
