@@ -34,9 +34,13 @@ install_apt_if_missing zsh
 # Check current default shell
 CURRENT_SHELL=$(getent passwd "$USER" | cut -d: -f7)
 ZSH_PATH=$(command -v zsh)
-if [[ "$CURRENT_SHELL" != "$ZSH_PATH" ]]; then
+if [[ "${SET_DEFAULT_SHELL:-0}" != 1 ]]; then
+    echo "Leaving default shell as ${CURRENT_SHELL} (set SET_DEFAULT_SHELL=1 to change it)."
+elif [[ "$CURRENT_SHELL" != "$ZSH_PATH" ]]; then
     echo "Setting Zsh as default shell..."
-    chsh -s "$ZSH_PATH"
+    # sudo, not plain chsh: chsh asks for the user's own password, which a
+    # key-only user (cloud-init, Ansible) doesn't have — it would hang forever.
+    sudo chsh -s "$ZSH_PATH" "$USER"
 else
     echo "Zsh is already the default shell."
 fi
@@ -56,9 +60,11 @@ if ! command -v fzf >/dev/null 2>&1; then
     sudo mv /tmp/fzf /usr/local/bin/fzf
     rm /tmp/fzf.tar.gz
 fi
-sudo mkdir -p /usr/local/share/fzf
-sudo curl -fsSL -o /usr/local/share/fzf/key-bindings.zsh \
-    "https://raw.githubusercontent.com/junegunn/fzf/v${FZF_VERSION}/shell/key-bindings.zsh"
+if [[ ! -f /usr/local/share/fzf/key-bindings.zsh ]]; then
+    sudo mkdir -p /usr/local/share/fzf
+    sudo curl -fsSL -o /usr/local/share/fzf/key-bindings.zsh \
+        "https://raw.githubusercontent.com/junegunn/fzf/v${FZF_VERSION}/shell/key-bindings.zsh"
+fi
 
 # Neovim — Ubuntu's apt package is badly outdated (0.7.2 as of writing) and
 # this LazyVim config needs current. Installing the official prebuilt
