@@ -23,10 +23,16 @@ path = "~/.config/sesh"
 startup_command = "nvim ~/.config/sesh/sesh.toml"
 preview_command = "bat --color=always ~/.config/sesh/sesh.toml"
 
+# Project layout: 1 nvim (session startup_command), 2 claude, then ssh and services
+[[window]]
+name = "claude"
+startup_script = "claude"
+
 [[session]]
 name = "hello_teacher"
 path = "~/Projects/hello_teacher/"
-windows = ["ssh2", "air"]
+startup_command = "nvim"
+windows = ["claude", "ssh2", "air"]
 
 [[window]]
 name = "ssh2"
@@ -45,7 +51,8 @@ preview_command = "bat -l tmux --color=always ~/.config/tmux/tmux.conf"
 [[session]]
 name = "mobilityplus-migration"
 path = "~/Projects/mobilityplus-migration/"
-windows = ["ssh1", "prefect"]
+startup_command = "nvim"
+windows = ["claude", "ssh1", "prefect"]
 
 [[window]]
 name = "ssh1"
@@ -56,9 +63,16 @@ name = "prefect"
 startup_script = "uv run prefect server start"
 
 [[session]]
+name = "home_lab"
+path = "~/Projects/home_lab/"
+startup_command = "nvim"
+windows = ["claude"]
+
+[[session]]
 name = "move"
 path = "~/Projects/move/"
-windows = ["ssh3"]
+startup_command = "nvim"
+windows = ["claude", "ssh3"]
 
 [[window]]
 name = "ssh3"

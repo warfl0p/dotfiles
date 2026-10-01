@@ -154,5 +154,8 @@ export PATH="$HOME/go/bin:$PATH"
 # Resend CLI
 export PATH="$HOME/.resend/bin:$PATH"
 
+# Auto-activate project .venv (after PATH edits so its bin stays first)
+[ -f .venv/bin/activate ] && source .venv/bin/activate
+
 # must be sourced after every other widget is defined
 zinit light zsh-users/zsh-syntax-highlighting

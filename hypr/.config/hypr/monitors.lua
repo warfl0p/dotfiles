@@ -15,10 +15,11 @@ hl.monitor({ output = "", mode = "preferred", position = "auto", scale = omarchy
 
 -- Laptop panel + docked external monitor.
 hl.monitor({ output = "eDP-1", mode = "2880x1800@120.00", position = "-1x-1", scale = 1.5 })
-hl.monitor({ output = "HDMI-A-1", mode = "3440x1440@99.98", position = "1919x0", scale = 1.0 })
+local external = "desc:Samsung Electric Company S34J55x HTRM700221"
+hl.monitor({ output = external, mode = "3440x1440@99.98", position = "1919x0", scale = 1.0 })
 
 -- Workspace to monitor mapping.
 hl.workspace_rule({ workspace = "1", monitor = "eDP-1" })
 for workspace = 2, 9 do
-  hl.workspace_rule({ workspace = tostring(workspace), monitor = "HDMI-A-1" })
+  hl.workspace_rule({ workspace = tostring(workspace), monitor = external })
 end

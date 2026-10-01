@@ -55,9 +55,6 @@ o.bind("SUPER + D", "Apps menu", "omarchy-menu toggle apps")
 hl.unbind("SUPER + SPACE") -- was: Omarchy menu
 o.bind("SUPER + SPACE", nil, "~/.config/hypr/scripts/monitor_auto_move.sh")
 
-hl.unbind("SUPER + ALT + SPACE") -- was: Apps menu
-o.bind("SUPER + ALT + SPACE", nil, "~/.config/hypr/scripts/enable_laptop_profile.sh")
-
 -- Overwrite Share to launch workspace apps instead.
 hl.unbind("SUPER + CTRL + S") -- was: Share menu
 o.bind("SUPER + CTRL + S", "Launch workspace apps", "~/.local/bin/launch-workspace-apps")
