@@ -18,6 +18,9 @@ omarchy pkg aur add sesh-bin
 # One ssh-agent for every shell; .zshrc points SSH_AUTH_SOCK at this socket
 systemctl --user enable --now ssh-agent.socket
 
+# Keep VS Code on its own theme when the Omarchy theme changes
+mkdir -p ~/.local/state/omarchy/toggles && touch ~/.local/state/omarchy/toggles/skip-vscode-theme-changes
+
 # Check current default shell
 CURRENT_SHELL=$(getent passwd "$USER" | cut -d: -f7)
 if [[ "$CURRENT_SHELL" != "$(which zsh)" ]]; then

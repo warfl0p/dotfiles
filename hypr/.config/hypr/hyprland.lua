@@ -36,3 +36,6 @@ o.window("chrome-ompifgpmddkgmclendfeacglnodjjndh-Default", { fullscreen_state =
 -- window falls back to whatever workspace is currently active.
 o.window("^code$", { workspace = "2 silent" })
 o.window("chrome-ompifgpmddkgmclendfeacglnodjjndh-Default", { workspace = "4 silent" })
+
+-- Keep the current background when switching Omarchy themes (read by omarchy-theme-set).
+hl.env("OMARCHY_THEME_SKIP_BACKGROUND", "1")
