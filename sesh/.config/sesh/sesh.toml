@@ -32,10 +32,10 @@ startup_script = "claude"
 name = "hello_teacher"
 path = "~/Projects/hello_teacher/"
 startup_command = "nvim"
-windows = ["claude", "ssh2", "air"]
+windows = ["claude", "hello-teacher-ubuntu", "air"]
 
 [[window]]
-name = "ssh2"
+name = "hello-teacher-ubuntu"
 startup_script = "ssh deploy@hello-teacher-ubuntu"
 
 [[window]]
@@ -52,15 +52,15 @@ preview_command = "bat -l tmux --color=always ~/.config/tmux/tmux.conf"
 name = "mobilityplus-migration"
 path = "~/Projects/mobilityplus-migration/"
 startup_command = "nvim"
-windows = ["claude", "ssh1", "prefect"]
+windows = ["claude", "10.211.76.5", "services"]
 
 [[window]]
-name = "ssh1"
+name = "10.211.76.5"
 startup_script = "clear && ssh sysadmin@10.211.76.5"
 
 [[window]]
-name = "prefect"
-startup_script = "uv run prefect server start"
+name = "services"
+startup_script = "mprocs"
 
 [[session]]
 name = "home_lab"
@@ -72,8 +72,8 @@ windows = ["claude"]
 name = "move"
 path = "~/Projects/move/"
 startup_command = "nvim"
-windows = ["claude", "ssh3"]
+windows = ["claude", "move-migration"]
 
 [[window]]
-name = "ssh3"
+name = "move-migration"
 startup_script = "ssh deploy@move-migration"
