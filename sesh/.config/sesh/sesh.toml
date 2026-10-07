@@ -72,8 +72,8 @@ windows = ["claude"]
 name = "move"
 path = "~/Projects/move/"
 startup_command = "nvim"
-windows = ["claude", "move-migration"]
+windows = ["claude", "ssh-move-migration"]
 
 [[window]]
-name = "move-migration"
+name = "ssh-move-migration"
 startup_script = "ssh deploy@move-migration"
