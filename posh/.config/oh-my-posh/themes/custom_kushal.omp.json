@@ -6,13 +6,13 @@
             "alignment": "left",
             "segments": [
                 {
-                    "background": "#d75f00",
+                    "background": "#0f52ba",
                     "foreground": "#D6DEEB",
-                    "leading_diamond": "\ue0b2",
+                    "leading_diamond": "\ue0b6",
                     "properties": {
                         "alpine": "\uf300",
                         "arch": "\uf303",
-                        "omarchy": "\uf303",
+                        "omarchy": "\uf359",
                         "centos": "\uf304",
                         "debian": "\uf306",
                         "elementary": "\uf309",
@@ -29,16 +29,17 @@
                     },
                     "style": "diamond",
                     "template": "{{ .Icon }} ",
-                    "type": "os"
+                    "type": "os",
+                    "trailing_diamond": "\ue0b4 "
                 },
                 {
                     "type": "session",
                     "style": "diamond",
                     "foreground": "#ffffff",
                     "background": "#F3AE35",
-                    "leading_diamond": "<transparent,background>\ue0b0</>",
-                    "trailing_diamond": "",
-                    "template": "{{ if .SSHSession }} {{ end }}"
+                    "leading_diamond": "\ue0b6",
+                    "trailing_diamond": "\ue0b4 ",
+                    "template": "{{ if .SSHSession }}\ueba9 {{ end }}"
                 },
                 {
                     "background": "#3f3f3f",
@@ -47,12 +48,13 @@
                         "style": "agnoster_short",
                         "max_depth": 3,
                         "folder_icon": "\u2026",
-                        "folder_separator_icon": " <transparent>\ue0b1</> "
+                        "folder_separator_icon": " <transparent>\ue0b5</> "
                     },
-                    "style": "powerline",
-                    "powerline_symbol": "\ue0b0",
+                    "style": "diamond",
                     "template": " {{ .Path }} ",
-                    "type": "path"
+                    "type": "path",
+                    "leading_diamond": "\ue0b6",
+                    "trailing_diamond": "\ue0b4 "
                 },
                 {
                     "background": "#378504",
@@ -72,9 +74,9 @@
                         "branch_gone_icon": "\ueab8"
                     },
                     "style": "diamond",
-                    "leading_diamond": "<transparent,background>\ue0b0</>",
-                    "template": " {{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }} <transparent>\ue0b1</> <#121318>\uf044 {{ .Working.String }}</>{{ end }}{{ if .Staging.Changed }} <transparent>\ue0b1</> <#121318>\uf046 {{ .Staging.String }}</>{{ end }}{{ if gt .StashCount 0 }} <transparent>\ue0b1</> <#121318>\ueb4b {{ .StashCount }}</>{{ end }} ",
-                    "trailing_diamond": "\ue0b0",
+                    "leading_diamond": "\ue0b6",
+                    "template": " {{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }} <transparent>\ue0b5</> <#121318>\uf044 {{ .Working.String }}</>{{ end }}{{ if .Staging.Changed }} <transparent>\ue0b5</> <#121318>\uf046 {{ .Staging.String }}</>{{ end }}{{ if gt .StashCount 0 }} <transparent>\ue0b5</> <#121318>\ueb4b {{ .StashCount }}</>{{ end }} ",
+                    "trailing_diamond": "\ue0b4",
                     "type": "git",
                     "min_width": 70
                 }

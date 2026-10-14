@@ -33,6 +33,9 @@ hl.config({
 -- default. Keep everything fully opaque instead.
 o.window(".*", { tag = "-default-opacity", opacity = "1 1" })
 
+-- Hide the border and rounding when a window is the only tiled window on its workspace.
+hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 0, rounding = 0 })
+
 -- https://wiki.hypr.land/Configuring/Basics/Variables/#layout
 -- hl.config({
 --   layout = {

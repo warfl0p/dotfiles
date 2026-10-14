@@ -12,8 +12,8 @@ launch() {
     hyprctl dispatch "hl.dsp.exec_cmd(\"$escaped_cmd\", { workspace = \"$workspace silent\" })"
 }
 
-launch 1 "dbeaver"
+launch 1 "dbflux-improved"
 launch 2 "code"
 launch 3 "google-chrome-stable --profile-directory=Default"
 launch 4 "/opt/google/chrome/google-chrome --profile-directory=Default --app-id=ompifgpmddkgmclendfeacglnodjjndh"
-launch 9 "spotify"
+launch 9 "spotifast"

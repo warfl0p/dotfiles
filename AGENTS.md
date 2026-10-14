@@ -13,7 +13,8 @@ Personal dotfiles for Arch Linux (Omarchy) managed with [GNU Stow](https://www.g
 ├── hypr/        # Hyprland overrides (bindings, monitors, autostart, monitor scripts)
 ├── misc/        # Miscellaneous configs (terminal-colors.d/cal.scheme)
 ├── nvim/        # Neovim (LazyVim-based) config and plugins
-├── posh/        # Oh My Posh prompt theme (custom_kushal)
+├── omarchy/     # Custom Omarchy themes (vscode-2026)
+├── posh/        # Oh My Posh prompt themes (minimal, active; custom_kushal, previous)
 ├── sesh/        # sesh session manager config (tmux session definitions)
 ├── tmux/        # tmux config (Catppuccin theme, vi-mode, sesh integration)
 ├── zsh/         # .zshrc (zinit, fzf, zoxide, sesh keybindings)
@@ -26,7 +27,7 @@ Personal dotfiles for Arch Linux (Omarchy) managed with [GNU Stow](https://www.g
 All packages are deployed via `stow -t ~` from the repo root. The `install.sh` script installs dependencies through `omarchy pkg add` (stow, zsh, neovim, tmux, fzf, gh, zoxide, sesh, …), plus oh-my-posh, the catppuccin tmux theme, git-delta and fzf-tab, enables the systemd `ssh-agent.socket`, moves any conflicting real files aside as `*.pre-stow`, and then stows everything:
 
 ```sh
-stow -t ~ git tmux posh zsh nvim sesh alacritty misc bat hypr bin
+stow -t ~ git tmux posh zsh nvim sesh alacritty misc bat hypr bin omarchy
 ```
 
 ## Key conventions

@@ -1,0 +1,32 @@
+# Based on VS Code's built-in "Dark 2026" theme (theme-defaults/themes/2026-dark.json)
+mode = "dark"
+
+accent = "#7aa2f7"
+selection = "#276782"
+muted = "#555555"
+
+background = "#121314"
+dark_background = "#0c0d0e"
+darker_background = "#070808"
+lighter_background = "#191a1b"
+
+foreground = "#bfbfbf"
+dark_foreground = "#8c8c8c"
+light_foreground = "#cccccc"
+bright_foreground = "#ededed"
+
+red = "#f7768e"
+yellow = "#e0af68"
+orange = "#eb927b"
+green = "#9ece6a"
+cyan = "#449dab"
+blue = "#7aa2f7"
+magenta = "#ad8ee6"
+brown = "#75493d"
+
+bright_red = "#ff7a93"
+bright_yellow = "#ff9e64"
+bright_green = "#b9f27c"
+bright_cyan = "#0db9d7"
+bright_blue = "#7da6ff"
+bright_magenta = "#bb9af7"

@@ -35,7 +35,7 @@ setopt hist_save_no_dups
 setopt hist_find_no_dups
 
 # ─── Prompt ───────────────────────────────────────────────────────────────────
-eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/themes/custom_kushal.omp.json)"
+eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/themes/minimal.omp.json)"
 
 # ─── Plugins & Snippets ───────────────────────────────────────────────────────
 zinit light zsh-users/zsh-completions

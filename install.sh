@@ -68,7 +68,7 @@ fi
 # Stow dotfiles. Omarchy ships real files at some of these paths (hypr, alacritty),
 # which makes stow abort, so move any non-symlink target aside as *.pre-stow first.
 cd "$DOTFILES_DIR"
-PACKAGES=(git tmux posh zsh nvim sesh alacritty misc bat hypr bin)
+PACKAGES=(git tmux posh zsh nvim sesh alacritty misc bat hypr bin omarchy)
 for pkg in "${PACKAGES[@]}"; do
     while IFS= read -r -d '' file; do
         target="$HOME/${file#"$pkg"/}"
