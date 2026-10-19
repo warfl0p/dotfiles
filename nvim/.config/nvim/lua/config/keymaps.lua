@@ -2,13 +2,12 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
--- ctrl+p open recent files of current project
-local telescope = require("telescope.builtin")
-
+-- ctrl+p: VSCode-style Ctrl+P via fff.nvim (frecency-ranked fuzzy file finder;
+-- recently/frequently opened files rank higher automatically, see lua/plugins/fff.lua)
 vim.keymap.set("n", "<C-p>", function()
-  telescope.oldfiles({ cwd_only = true })
+  require("fff").find_files()
 end, {
-  desc = "Recent files in current project (MRU)",
+  desc = "Find files (frecency-ranked, VSCode-style)",
   noremap = true,
   silent = true,
 })
