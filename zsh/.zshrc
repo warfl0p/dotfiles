@@ -22,7 +22,8 @@ zinit light-mode for \
 
 ### End of Zinit's installer chunk
 # Shell integrations
-export PATH="$HOME/.local/bin:$PATH"
+# Same PATH as the T3 service gets from ~/.config/environment.d (home_lab ansible)
+export PATH="$HOME/.local/share/mise/shims:$HOME/go/bin:$HOME/.local/bin:$PATH"
 export EDITOR=nvim
 export VISUAL=nvim
 
