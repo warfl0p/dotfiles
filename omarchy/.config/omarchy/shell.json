@@ -1,0 +1,101 @@
+{
+  "bar": {
+    "centerAnchor": "omarchy.clock",
+    "layout": {
+      "center": [
+        {
+          "id": "omarchy.indicators"
+        },
+        {
+          "id": "omarchy.clock",
+          "format": "ddd d MMM HH:mm",
+          "formatAlt": "d MMMM 'W'ww yyyy",
+          "verticalFormat": "HH\n—\nmm",
+          "weekStartDay": "monday"
+        },
+        {
+          "id": "omarchy.keyboard-layout"
+        },
+        {
+          "id": "omarchy.system-update"
+        }
+      ],
+      "left": [
+        {
+          "id": "workspaces",
+          "type": "qml"
+        },
+        {
+          "id": "omarchy.spacer",
+          "size": 14
+        },
+        {
+          "id": "matthias.media"
+        }
+      ],
+      "right": [
+        {
+          "id": "cpu-ram",
+          "type": "command",
+          "exec": "~/.config/omarchy/bar/scripts/cpu-ram-status",
+          "interval": 2
+        },
+        {
+          "id": "omarchy.tray"
+        },
+        {
+          "id": "njpatel.omapager"
+        },
+        {
+          "id": "matthias.tailscale"
+        },
+        {
+          "id": "omarchy.agents"
+        },
+        {
+          "id": "omarchy.bluetooth"
+        },
+        {
+          "id": "matthias.network"
+        },
+        {
+          "id": "crmne.hyprmoncfg"
+        },
+        {
+          "id": "matthias.audio"
+        },
+        {
+          "id": "omarchy.power"
+        }
+      ]
+    },
+    "position": "top",
+    "transparent": true
+  },
+  "idle": {
+    "lock": 300,
+    "screensaver": 150
+  },
+  "plugins": [
+    {
+      "id": "io.github.maajix.spotlight"
+    },
+    {
+      "id": "io.github.sirjul1337.lock-explorer",
+      "boot": "snapshot:split",
+      "design": "split",
+      "reduceMotion": "on",
+      "blankMs": 60000
+    }
+  ],
+  "version": 1,
+  "disabledPlugins": [
+    "omarchy.notifications",
+    "omarchy.media",
+    "omarchy.lock"
+  ],
+  "cloneSourceRestores": [
+    "matthias.media",
+    "io.github.sirjul1337.lock-explorer"
+  ]
+}
