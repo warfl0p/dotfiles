@@ -31,16 +31,23 @@ startup_script = "claude"
 [[session]]
 name = "hello_teacher"
 path = "~/Projects/hello_teacher/"
-startup_command = "nvim"
-windows = ["claude", "hello-teacher-ubuntu", "air"]
+# Developed on dev-vm (agents via T3 Code there); zsh -i so mise's Go is on PATH
+startup_command = '''ssh -t dev@dev-vm 'cd src/hello_teacher && exec zsh -ic "nvim .; exec zsh"' '''
+windows = ["dev-vm-claude", "hello-teacher-ubuntu", "air"]
 
 [[window]]
 name = "hello-teacher-ubuntu"
 startup_script = "ssh deploy@hello-teacher-ubuntu"
 
+# ssh drops TERM_PROGRAM; without it claude never enables extended keys and
+# tmux delivers Shift+Enter as plain Enter
+[[window]]
+name = "dev-vm-claude"
+startup_script = '''ssh -t dev@dev-vm 'cd src/hello_teacher && TERM_PROGRAM=tmux exec zsh -ic "claude; exec zsh"' '''
+
 [[window]]
 name = "air"
-startup_script = "mprocs"
+startup_script = '''ssh -t dev@dev-vm 'cd src/hello_teacher && exec zsh -ic "air; exec zsh"' '''
 
 [[session]]
 name = "tmux"

@@ -35,7 +35,7 @@ hl.unbind("SUPER + SHIFT + B") -- was: Browser
 o.bind("SUPER + SHIFT + B", "Chrome (profile 1)", { launch = 'google-chrome-stable --profile-directory="Profile 1"' })
 
 hl.unbind("SUPER + SHIFT + S") -- was: Google Maps
-o.bind("SUPER + SHIFT + S", "Music", { omarchy = "spotify" })
+o.bind("SUPER + SHIFT + S", "Music", "omarchy-launch-or-focus spotifast")
 
 o.bind("SUPER + SHIFT + T", "Activity", { tui = "btop" })
 
@@ -47,13 +47,15 @@ hl.unbind("SUPER + CTRL + D") -- was: Display panel
 o.bind("SUPER + CTRL + D", "Omarchy menu", "omarchy-menu")
 
 -- Bind Super+D to the Omarchy Quattro apps menu (Walker was removed in the
--- Quattro upgrade), and repurpose Super+Space/Super+Alt+Space for monitor
--- scripts.
+-- Quattro upgrade), and repurpose Super+Space for the monitor
+-- script.
 hl.unbind("SUPER + D") -- was: unbound
 o.bind("SUPER + D", "Apps menu", "omarchy-menu toggle apps")
 
 hl.unbind("SUPER + SPACE") -- was: Omarchy menu
 o.bind("SUPER + SPACE", nil, "~/.config/hypr/scripts/monitor_auto_move.sh")
+
+hl.unbind("SUPER + ALT + SPACE") -- was: Apps menu (intentionally left unbound)
 
 -- Overwrite Share to launch workspace apps instead.
 hl.unbind("SUPER + CTRL + S") -- was: Share menu
@@ -72,6 +74,7 @@ o.bind("SUPER + H", "Move focus left", hl.dsp.focus({ direction = "l" }))
 o.bind("SUPER + L", "Move focus right", hl.dsp.focus({ direction = "r" }))
 o.bind("SUPER + K", "Move focus up", hl.dsp.focus({ direction = "u" }))
 o.bind("SUPER + J", "Move focus down", hl.dsp.focus({ direction = "d" }))
+o.bind("SUPER + ALT + J", "Toggle window split", hl.dsp.layout("togglesplit"))
 
 o.bind("SUPER + SHIFT + H", "Swap window to the left", hl.dsp.window.swap({ direction = "l" }))
 o.bind("SUPER + SHIFT + L", "Swap window to the right", hl.dsp.window.swap({ direction = "r" }))
@@ -96,3 +99,7 @@ hl.unbind("XF86AudioRaiseVolume") -- was: Volume up
 hl.unbind("XF86AudioLowerVolume") -- was: Volume down
 o.bind("XF86AudioRaiseVolume", "Volume up", "~/.local/bin/omarchy-audio-output-volume raise", { locked = true, repeating = true })
 o.bind("XF86AudioLowerVolume", "Volume down", "~/.local/bin/omarchy-audio-output-volume lower", { locked = true, repeating = true })
+
+-- >>> spotlight setup tour (managed; rerun via "Run Setup Tour") >>>
+o.bind("ALT + SPACE", "Spotlight", "omarchy-shell shell toggle io.github.maajix.spotlight '{}'")
+-- <<< spotlight setup tour <<<

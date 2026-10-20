@@ -12,7 +12,8 @@ function sesh-sessions() {
           --reverse \
           --border \
           --border-label ' sesh ' \
-          --prompt '⚡  '
+          --prompt '⚡  ' \
+          --bind 'change:first'
     )
     zle reset-prompt >/dev/null 2>&1 || true
     [[ -z "$session" ]] && return
@@ -24,13 +25,13 @@ bindkey -M emacs '\es' sesh-sessions
 bindkey -M vicmd '\es' sesh-sessions
 bindkey -M viins '\es' sesh-sessions
 
-# ctrl A to open home session
-_sesh_home() {
-  BUFFER="sesh connect 'home (~)'"
+# ctrl space to run claude
+_run_claude() {
+  BUFFER="claude"
   zle accept-line
 }
-zle -N _sesh_home
-bindkey '^A' _sesh_home
+zle -N _run_claude
+bindkey '^@' _run_claude
 # alt L to open last session
 sesh-last-session() {
   {

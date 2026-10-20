@@ -40,5 +40,11 @@ o.window("chrome-ompifgpmddkgmclendfeacglnodjjndh-Default", { workspace = "4 sil
 -- Keep the current background when switching Omarchy themes (read by omarchy-theme-set).
 hl.env("OMARCHY_THEME_SKIP_BACKGROUND", "1")
 
+
+-- ONLYOFFICE's main window is class "ONLYOFFICE"; only its dialogs (open,
+-- save-changes prompt, ...) use "DesktopEditors". They float but land in the
+-- top-left corner, so center them at their own size.
+o.window("^DesktopEditors$", { center = true })
+
 -- Added by hyprmoncfg: its generated monitor rules load last, so nothing before this can override the applied layout.
 do local path = os.getenv("HOME") .. "/.config/hypr/hyprmoncfg-monitors.lua"; local file = io.open(path, "r"); if file then file:close(); dofile(path) end end
