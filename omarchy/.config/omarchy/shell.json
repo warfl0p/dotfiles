@@ -86,16 +86,21 @@
       "design": "split",
       "reduceMotion": "on",
       "blankMs": 60000
+    },
+    {
+      "id": "matthias.osd"
     }
   ],
   "version": 1,
   "disabledPlugins": [
     "omarchy.notifications",
     "omarchy.media",
-    "omarchy.lock"
+    "omarchy.lock",
+    "omarchy.osd"
   ],
   "cloneSourceRestores": [
     "matthias.media",
-    "io.github.sirjul1337.lock-explorer"
+    "io.github.sirjul1337.lock-explorer",
+    "matthias.osd"
   ]
 }

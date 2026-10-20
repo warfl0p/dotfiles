@@ -18,6 +18,10 @@ hl.config({
   decoration = {
     -- Use round window corners.
     rounding = 8,
+
+    -- Omarchy disables blur; enable it for the glass OSD. Windows are forced
+    -- opaque below, so they get no visible blur.
+    blur = { enabled = true, size = 8, passes = 3 },
   },
 })
 
@@ -51,3 +55,7 @@ hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 
 --     column_width = 0.97,
 --   },
 -- })
+
+-- Frosted-glass OSD (matthias.osd): blur behind the translucent card only.
+-- ignore_alpha skips the fully transparent rest of the fullscreen layer.
+hl.layer_rule({ match = { namespace = "omarchy-osd" }, blur = true, ignore_alpha = 0.1 })
