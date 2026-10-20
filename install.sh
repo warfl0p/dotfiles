@@ -1,8 +1,9 @@
 #!/bin/bash
 
-set -e
+set -euo pipefail
 
-DOTFILES_DIR="$HOME/dotfiles"
+# Run from a clone of this repo: git clone https://github.com/warfl0p/dotfiles ~/dotfiles
+DOTFILES_DIR=$(dirname "$(realpath "$0")")
 
 if ! command -v omarchy &> /dev/null; then
     echo "This installer expects an Omarchy system (omarchy not found on PATH)." >&2
@@ -11,64 +12,35 @@ fi
 
 # Packages go through omarchy so system upgrades stay behind `omarchy update`.
 # `omarchy pkg add` is idempotent: it skips packages that are already present.
-omarchy pkg add stow zsh alacritty neovim tmux fzf fd bat git uv github-cli \
-    zoxide eza jq tokei yazi diffnav
-omarchy pkg aur add sesh-bin
+# Core: everything the shell, tmux, sesh and git configs depend on.
+omarchy pkg add stow zsh alacritty neovim tmux fzf fd bat eza git git-delta uv \
+    github-cli zoxide jq tokei yazi diffnav lazygit mise
+omarchy pkg aur add sesh-bin oh-my-posh-bin
 
-# One ssh-agent for every shell; .zshrc points SSH_AUTH_SOCK at this socket
-systemctl --user enable --now ssh-agent.socket
+# Apps referenced by hypr bindings/autostart, launch-workspace-apps and sesh windows.
+omarchy pkg add google-chrome dgop
+omarchy pkg aur add visual-studio-code-bin seafile-client hyprmoncfg-bin \
+    spotifast-bin dankcalendar-bin mprocs-bin
 
-# Keep VS Code on its own theme when the Omarchy theme changes
-mkdir -p ~/.local/state/omarchy/toggles && touch ~/.local/state/omarchy/toggles/skip-vscode-theme-changes
+# Third-party omarchy-shell plugins (own matthias.* plugins are stowed below)
+for url in \
+    https://github.com/crmne/omarchy-hyprmoncfg \
+    https://github.com/maajix/omarchy-spotlight \
+    https://github.com/SirJul1337/omarchy-lock-explorer \
+    https://github.com/njpatel/omapager; do
+    omarchy plugin add "$url" --enable --yes || echo "Skipping plugin $url"
+done
 
-# Check current default shell
-CURRENT_SHELL=$(getent passwd "$USER" | cut -d: -f7)
-if [[ "$CURRENT_SHELL" != "$(which zsh)" ]]; then
-    echo "Setting Zsh as default shell..."
-    chsh -s $(which zsh)
-else
-    echo "Zsh is already the default shell."
+# Catppuccin tmux theme (loaded with `run` in tmux.conf, no TPM)
+CATPPUCCIN_DIR="$HOME/.config/tmux/plugins/catppuccin/tmux"
+if [ ! -d "$CATPPUCCIN_DIR" ]; then
+    git clone -b v2.1.3 https://github.com/catppuccin/tmux.git "$CATPPUCCIN_DIR"
 fi
 
-# Clone dotfiles
-if [ ! -d "$DOTFILES_DIR" ]; then
-    echo "Cloning dotfiles..."
-    git clone https://github.com/warfl0p/dotfiles.git "$DOTFILES_DIR"
-fi
-
-# Install oh-my-posh
-if ! command -v oh-my-posh &> /dev/null; then
-    mkdir -p ~/bin
-    export PATH="$PATH:$HOME/bin"
-    curl -s https://ohmyposh.dev/install.sh | bash -s -- -d ~/bin
-fi
-
-# Authenticate the GitHub CLI (interactive)
-if ! gh auth status &> /dev/null; then
-    gh auth login
-fi
-
-# Install Tmux + Catppuccin theme
-CATPUCCIN_DIR="$HOME/.config/tmux/plugins/catppuccin/tmux"
-if [ ! -d "$CATPUCCIN_DIR" ]; then
-    mkdir -p "$(dirname "$CATPUCCIN_DIR")"
-    git clone -b v2.1.3 https://github.com/catppuccin/tmux.git "$CATPUCCIN_DIR"
-fi
-
-# delta for improved diffs (AUR)
-omarchy pkg aur add git-delta-git || echo "Skipping git-delta-git (AUR unavailable)"
-
-# fzf-tab plugin
-FZF_TAB_DIR="$HOME/.zsh_plugins/fzf-tab"
-if [ ! -d "$FZF_TAB_DIR" ]; then
-    mkdir -p ~/.zsh_plugins
-    git clone https://github.com/Aloxaf/fzf-tab "$FZF_TAB_DIR"
-fi
-
-# Stow dotfiles. Omarchy ships real files at some of these paths (hypr, alacritty),
+# Stow dotfiles. Omarchy ships real files at some of these paths (hypr, alacritty, lazygit),
 # which makes stow abort, so move any non-symlink target aside as *.pre-stow first.
 cd "$DOTFILES_DIR"
-PACKAGES=(git tmux posh zsh nvim sesh alacritty misc bat hypr bin omarchy)
+PACKAGES=(git tmux posh zsh nvim sesh alacritty misc bat hypr bin omarchy mise systemd lazygit)
 for pkg in "${PACKAGES[@]}"; do
     while IFS= read -r -d '' file; do
         target="$HOME/${file#"$pkg"/}"
@@ -80,5 +52,31 @@ for pkg in "${PACKAGES[@]}"; do
     done < <(find "$pkg" -type f -print0)
 done
 stow -t ~ "${PACKAGES[@]}"
+
+# Register the custom tmux syntax used by sesh previews
+bat cache --build
+
+# Tools pinned in ~/.config/mise/config.toml (claude, codex, gh, pi)
+mise install
+
+# One ssh-agent for every shell; .zshrc points SSH_AUTH_SOCK at this socket
+systemctl --user enable --now ssh-agent.socket
+systemctl --user daemon-reload
+systemctl --user enable --now zsh-history-backup.timer
+
+# Keep VS Code on its own theme when the Omarchy theme changes
+mkdir -p ~/.local/state/omarchy/toggles && touch ~/.local/state/omarchy/toggles/skip-vscode-theme-changes
+
+omarchy theme set vscode-2026 || echo "Could not set theme vscode-2026"
+
+if [[ "$(getent passwd "$USER" | cut -d: -f7)" != "$(command -v zsh)" ]]; then
+    echo "Setting Zsh as default shell..."
+    chsh -s "$(command -v zsh)"
+fi
+
+# Interactive steps last, so the unattended part finishes first
+if ! gh auth status &> /dev/null; then
+    gh auth login
+fi
 
 echo "Done! Restart your shell or log out and back in."

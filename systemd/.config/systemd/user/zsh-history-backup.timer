@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily zsh history backup timer
+Requires=zsh-history-backup.service
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+AccuracySec=1h
+
+[Install]
+WantedBy=timers.target

@@ -1,5 +1,4 @@
 source <(fzf --zsh)
-source ~/.zsh_plugins/fzf-tab/fzf-tab.plugin.zsh
 
 export FZF_CTRL_T_OPTS="--preview 'if [ -d {} ]; then ls -A --color=always {}; else bat --color=always --style=numbers --line-range=:200 {}; fi'"
 

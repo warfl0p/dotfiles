@@ -11,17 +11,9 @@ source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
-# Annexes (required before plugins)
-zinit light-mode for \
-    zdharma-continuum/zinit-annex-as-monitor \
-    zdharma-continuum/zinit-annex-bin-gem-node \
-    zdharma-continuum/zinit-annex-patch-dl \
-    zdharma-continuum/zinit-annex-rust
-
 # ─── Environment ──────────────────────────────────────────────────────────────
-export PATH=$PATH:/home/matthias/bin
+typeset -U path PATH  # drop duplicate PATH entries in nested shells (tmux, zsh -ic)
 export PATH=$HOME/.npm-global/bin:$PATH
-export PATH=$HOME/.local/share/mise/installs/go/latest/bin:$PATH  # mise keeps `latest` pointed at the newest install
 
 # ─── History ──────────────────────────────────────────────────────────────────
 export HISTSIZE=12000
@@ -39,7 +31,6 @@ eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/themes/minimal.omp.jso
 
 # ─── Plugins & Snippets ───────────────────────────────────────────────────────
 zinit light zsh-users/zsh-completions
-zinit light zsh-users/zsh-autosuggestions
 
 zinit snippet OMZL::git.zsh
 zinit snippet OMZP::git
@@ -54,6 +45,10 @@ fpath+=~/.zfunc
 
 autoload -Uz compinit && compinit
 zinit cdreplay -q
+
+# fzf-tab: after compinit, before widget-wrapping plugins (autosuggestions, syntax-highlighting)
+zinit light Aloxaf/fzf-tab
+zinit light zsh-users/zsh-autosuggestions
 
 # uv shell completions
 eval "$(uv generate-shell-completion zsh)"
