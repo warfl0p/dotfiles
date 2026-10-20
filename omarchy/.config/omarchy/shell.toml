@@ -1,10 +1,36 @@
 [font]
 base-size = 11
 
-# Glass notifications to match matthias.osd: no border, background tinted
-# ~12% toward the foreground at 80% opacity. Hyprland blurs behind it
-# (omapager layer rule in hypr/looknfeel.lua).
+# Glass surfaces: no border, background tinted ~12% toward the foreground at
+# 80% opacity. Hyprland blurs behind them (layer rules in hypr/looknfeel.lua).
+# matthias.osd reads [popups] too.
+
+[popups]
+border-width     = 0
+background       = "#272829"
+background-alpha = 0.8
+
+[tooltip]
+border-width     = 0
+background       = "#272829"
+background-alpha = 0.95
+
 [notifications]
-border-width = 0
-background = "#272829"
+border-width     = 0
+background       = "#272829"
+background-alpha = 0.8
+
+[menu]
+border-width     = 0
+background       = "#272829"
+background-alpha = 0.8
+
+[launcher]
+border-width     = 0
+background       = "#272829"
+background-alpha = 0.8
+
+[polkit]
+border-width     = 0
+background       = "#272829"
 background-alpha = 0.8

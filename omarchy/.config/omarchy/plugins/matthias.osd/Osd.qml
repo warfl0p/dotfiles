@@ -146,9 +146,9 @@ Item {
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.bottom: parent.bottom
       anchors.bottomMargin: Style.space(67)
-      // Translucent glass: Hyprland blurs what is behind the omarchy-osd layer
-      // (layer rule in hypr/looknfeel.lua). No border, pill shape.
-      color: Util.alpha(Qt.tint(Commons.Color.background, Util.alpha(Commons.Color.popups.text, 0.12)), 0.8)
+      // Glass fill from [popups] in omarchy/shell.toml; Hyprland blurs behind
+      // the omarchy-osd layer (hypr/looknfeel.lua). No border, pill shape.
+      color: Commons.Color.popups.background
       radius: height / 2
       opacity: root.opened ? 1 : 0
 

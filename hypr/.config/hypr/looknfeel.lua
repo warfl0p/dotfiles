@@ -56,7 +56,11 @@ hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 
 --   },
 -- })
 
--- Frosted-glass OSD (matthias.osd): blur behind the translucent card only.
--- ignore_alpha skips the fully transparent rest of the fullscreen layer.
-hl.layer_rule({ match = { namespace = "omarchy-osd" }, blur = true, ignore_alpha = 0.1 })
-hl.layer_rule({ match = { namespace = "omapager" }, blur = true, ignore_alpha = 0.1 })
+-- Frosted-glass shell surfaces (styled in omarchy/shell.toml): blur behind the
+-- 80% cards only. ignore_alpha 0.6 skips transparent canvas and the 50% scrims
+-- behind menus, so the desktop around a card stays sharp.
+hl.layer_rule({
+  match = { namespace = "^(omarchy-osd|omapager|omarchy-keyboard-panel|omarchy-menu|omarchy-clipboard|omarchy-emojis|omarchy-spotlight|omarchy-polkit)$" },
+  blur = true,
+  ignore_alpha = 0.6,
+})
