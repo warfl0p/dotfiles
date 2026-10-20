@@ -1,0 +1,10 @@
+[font]
+base-size = 11
+
+# Glass notifications to match matthias.osd: no border, background tinted
+# ~12% toward the foreground at 80% opacity. Hyprland blurs behind it
+# (omapager layer rule in hypr/looknfeel.lua).
+[notifications]
+border-width = 0
+background = "#272829"
+background-alpha = 0.8
