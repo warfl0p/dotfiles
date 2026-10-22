@@ -31,7 +31,7 @@ Item {
   // glyph or message it carries. Messages grow with their text up to
   // `maxMessageWidth` and elide beyond it.
   // Every OSD is the same slim, wide pill: little vertical, generous horizontal padding.
-  readonly property int padX: Style.space(24)
+  readonly property int padX: Style.space(18)
   readonly property int padY: Style.space(9)
   readonly property int gap: Style.space(16)
   // A glyph next to a message reads airier than it measures: the icon outline
