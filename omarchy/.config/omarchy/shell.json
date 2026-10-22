@@ -78,14 +78,12 @@
   },
   "plugins": [
     {
-      "id": "io.github.maajix.spotlight"
-    },
-    {
       "id": "io.github.sirjul1337.lock-explorer",
       "boot": "snapshot:split",
       "design": "split",
       "reduceMotion": "on",
-      "blankMs": 60000
+      "blankMs": 60000,
+      "openAs": "full"
     },
     {
       "id": "matthias.osd"
