@@ -247,7 +247,8 @@ Item {
     if (!shell) return
     shell.summon("omarchy.osd", JSON.stringify({
       icon: iconName || "media",
-      message: osdMessage(player || activePlayer, actionLabel)
+      message: osdMessage(player || activePlayer, actionLabel),
+      art: (player || activePlayer || {}).trackArtUrl || ""
     }))
   }
 

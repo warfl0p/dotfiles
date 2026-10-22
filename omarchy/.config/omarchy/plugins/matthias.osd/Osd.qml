@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
+import Quickshell.Widgets
 import qs.Commons
 import qs.Commons as Commons
 import qs.Ui
@@ -18,8 +19,12 @@ Item {
   property int maxValue: 100
   property bool hasProgress: true
   property int duration: 1200
+  property string art: ""
 
   readonly property bool mediaOsd: iconKey.indexOf("media") === 0 || iconKey.indexOf("player") === 0
+  // Media OSDs show the track's cover after the glyph when the player has one.
+  readonly property bool showArt: root.mediaOsd && root.art !== ""
+  readonly property int artWidth: root.showArt ? Style.font.displayLarge + root.messageGap : 0
 
   // The card is built out of measured columns instead of fixed widths, so it
   // keeps exactly `pad` between border and content on every side whatever
@@ -49,9 +54,9 @@ Item {
   // digits don't jitter between 9% and 100%.
   readonly property int valueWidth: Math.ceil(Math.max(valueMetrics.advanceWidth, messageMetrics.advanceWidth))
   readonly property int messageWidth: Math.min(Math.ceil(messageMetrics.advanceWidth), root.maxMessageWidth)
-  readonly property int contentWidth: root.hasProgress
+  readonly property int contentWidth: root.artWidth + (root.hasProgress
     ? root.iconWidth + root.gap + root.barWidth + root.gap + root.valueWidth
-    : (root.message === "" ? root.iconWidth : root.iconWidth + root.messageGap + root.messageWidth)
+    : (root.message === "" ? root.iconWidth : root.iconWidth + root.messageGap + root.messageWidth))
 
   function iconFor(name, percent) {
     return OsdModel.iconFor(name, percent)
@@ -76,6 +81,7 @@ Item {
   function open(payloadJson) {
     try {
       var p = JSON.parse(payloadJson || "{}")
+      art = p.art || ""
       show(p.icon || "", p.message || "", p.value === undefined ? "" : String(p.value), p.max === undefined ? "100" : String(p.max), p.progressText || "", p.duration === undefined ? "1200" : String(p.duration))
     } catch (e) {}
   }
@@ -171,6 +177,22 @@ Item {
             text: root.icon
             font: iconMetrics.font
             color: Commons.Color.popups.text
+          }
+        }
+        ClippingRectangle {
+          visible: root.showArt
+          width: Style.font.displayLarge
+          height: width
+          anchors.verticalCenter: parent.verticalCenter
+          radius: width / 2
+          color: "transparent"
+          Image {
+            anchors.fill: parent
+            fillMode: Image.PreserveAspectCrop
+            asynchronous: true
+            sourceSize.width: parent.width * 2
+            sourceSize.height: parent.height * 2
+            source: root.art
           }
         }
         Rectangle {
