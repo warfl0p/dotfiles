@@ -23,8 +23,8 @@ install_apt_if_missing() {
 echo "Updating apt and installing base dependencies..."
 sudo apt update
 # gcc + make: LazyVim's treesitter parsers compile from source on :TSUpdate,
-# and some Mason-installed tools need a compiler too (see commit "required
-# compilers" on ubuntu_core). Not the full build-essential meta-package —
+# and some Mason-installed tools need a compiler too (see commit dccbef3 "required
+# compilers"). Not the full build-essential meta-package —
 # just the two binaries treesitter actually needs.
 sudo apt install -y unzip stow curl git tree gcc make
 
