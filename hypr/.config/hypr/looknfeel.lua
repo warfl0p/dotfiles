@@ -21,7 +21,7 @@ hl.config({
 
     -- Omarchy disables blur; enable it for the glass OSD. Windows are forced
     -- opaque below, so they get no visible blur.
-    blur = { enabled = true, size = 8, passes = 3 },
+    blur = { enabled = true, size = 5, passes = 2 },
   },
 })
 
@@ -58,7 +58,8 @@ hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 
 
 -- Frosted-glass shell surfaces (styled in omarchy/shell.toml): blur behind the
 -- 80% cards only. ignore_alpha 0.6 skips transparent canvas and the 50% scrims
--- behind menus, so the desktop around a card stays sharp.
+-- behind menus, so the desktop around a card stays sharp. Bar panels live on
+-- omarchy-keyboard-panel, not on omarchy-bar.
 hl.layer_rule({
   match = { namespace = "^(omarchy-osd|omapager|omarchy-keyboard-panel|omarchy-menu|omarchy-clipboard|omarchy-emojis|omarchy-spotlight|omarchy-polkit)$" },
   blur = true,
