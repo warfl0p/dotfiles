@@ -20,7 +20,7 @@ omarchy pkg aur add sesh-bin oh-my-posh-bin
 # Apps referenced by hypr bindings/autostart, launch-workspace-apps and sesh windows.
 omarchy pkg add google-chrome dgop
 omarchy pkg aur add visual-studio-code-bin seafile-client hyprmoncfg-bin \
-    spotifast-bin dankcalendar-bin mprocs-bin
+    spotifast-bin dankcalendar-bin mprocs-bin onlyoffice-bin
 
 # Third-party omarchy-shell plugins (own matthias.* plugins are stowed below)
 for url in \
@@ -66,6 +66,12 @@ systemctl --user enable --now zsh-history-backup.timer
 
 # Keep VS Code on its own theme when the Omarchy theme changes
 mkdir -p ~/.local/state/omarchy/toggles && touch ~/.local/state/omarchy/toggles/skip-vscode-theme-changes
+
+# Open Office/OpenDocument files in OnlyOffice instead of LibreOffice
+xdg-mime default onlyoffice-desktopeditors.desktop $(grep '^MimeType=' \
+    /usr/share/applications/onlyoffice-desktopeditors.desktop | cut -d= -f2 | tr ';' '\n' \
+    | grep -E '^application/(msword|vnd\.(ms-|openxmlformats|oasis))')
+xdg-mime default nvim.desktop text/csv
 
 omarchy theme set vscode-2026 || echo "Could not set theme vscode-2026"
 
