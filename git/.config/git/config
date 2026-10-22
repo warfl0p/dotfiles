@@ -26,8 +26,11 @@
 
 [delta]
   dark = true
-  plus-style = syntax "#123d12"
-  plus-emph-style = syntax "#2d7d2d"
+  # Same add/remove colors as Claude Code's diffs.
+  plus-style = syntax "#005f00"
+  plus-emph-style = syntax "#008700"
+  minus-style = syntax "#5f0000"
+  minus-emph-style = syntax "#870000"
   navigate = true
 	side-by-side = false
 	line-numbers = true

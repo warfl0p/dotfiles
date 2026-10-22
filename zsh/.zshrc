@@ -106,7 +106,7 @@ alias cal='cal -m -w -y'
 
 unalias gd 2>/dev/null
 gd() {
-  git diff "$@" -- . ':(exclude)*_templ.go' | diffnav --unified
+  git diff "$@" -- . ':(exclude)*_templ.go' | PATH="$HOME/.config/zsh/diffnav:$PATH" diffnav --unified
 }
 
 # ─── Functions ────────────────────────────────────────────────────────────────

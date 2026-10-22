@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# diffnav passes its theme's add/remove styles on the command line, which beat
+# git config. Drop them so delta uses the [delta] colors in ~/.config/git/config.
+args=()
+for arg in "$@"; do
+  case $arg in
+    --plus-style=* | --plus-emph-style=* | --minus-style=* | --minus-emph-style=*) ;;
+    *) args+=("$arg") ;;
+  esac
+done
+exec /usr/bin/delta "${args[@]}"
