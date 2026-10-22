@@ -100,6 +100,3 @@ hl.unbind("XF86AudioLowerVolume") -- was: Volume down
 o.bind("XF86AudioRaiseVolume", "Volume up", "~/.local/bin/omarchy-audio-output-volume raise", { locked = true, repeating = true })
 o.bind("XF86AudioLowerVolume", "Volume down", "~/.local/bin/omarchy-audio-output-volume lower", { locked = true, repeating = true })
 
--- >>> spotlight setup tour (managed; rerun via "Run Setup Tour") >>>
-o.bind("ALT + SPACE", "Spotlight", "omarchy-shell shell toggle io.github.maajix.spotlight '{}'")
--- <<< spotlight setup tour <<<

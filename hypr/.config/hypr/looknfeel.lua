@@ -61,7 +61,7 @@ hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 
 -- behind menus, so the desktop around a card stays sharp. Bar panels live on
 -- omarchy-keyboard-panel, not on omarchy-bar.
 hl.layer_rule({
-  match = { namespace = "^(omarchy-osd|omapager|omarchy-keyboard-panel|omarchy-menu|omarchy-clipboard|omarchy-emojis|omarchy-spotlight|omarchy-polkit)$" },
+  match = { namespace = "^(omarchy-osd|omapager|omarchy-keyboard-panel|omarchy-menu|omarchy-clipboard|omarchy-emojis|omarchy-polkit)$" },
   blur = true,
   ignore_alpha = 0.6,
 })

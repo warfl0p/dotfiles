@@ -13,9 +13,12 @@ fi
 # Packages go through omarchy so system upgrades stay behind `omarchy update`.
 # `omarchy pkg add` is idempotent: it skips packages that are already present.
 # Core: everything the shell, tmux, sesh and git configs depend on.
-omarchy pkg add stow zsh alacritty neovim tmux fzf fd bat eza git git-delta uv \
+omarchy pkg add stow zsh neovim tmux fzf fd bat eza git git-delta uv \
     github-cli zoxide jq tokei yazi diffnav lazygit mise
 omarchy pkg aur add sesh-bin oh-my-posh-bin
+
+# Install Alacritty and make it the xdg-terminal-exec default (Super + Return)
+omarchy install terminal alacritty
 
 # Apps referenced by hypr bindings/autostart, launch-workspace-apps and sesh windows.
 omarchy pkg add google-chrome dgop
@@ -25,7 +28,6 @@ omarchy pkg aur add visual-studio-code-bin seafile-client hyprmoncfg-bin \
 # Third-party omarchy-shell plugins (own matthias.* plugins are stowed below)
 for url in \
     https://github.com/crmne/omarchy-hyprmoncfg \
-    https://github.com/maajix/omarchy-spotlight \
     https://github.com/SirJul1337/omarchy-lock-explorer \
     https://github.com/njpatel/omapager; do
     omarchy plugin add "$url" --enable --yes || echo "Skipping plugin $url"
@@ -73,7 +75,8 @@ xdg-mime default onlyoffice-desktopeditors.desktop $(grep '^MimeType=' \
     | grep -E '^application/(msword|vnd\.(ms-|openxmlformats|oasis))')
 xdg-mime default nvim.desktop text/csv
 
-omarchy theme set vscode-2026 || echo "Could not set theme vscode-2026"
+# The theme ships no wallpaper; hyprland.lua sets this too, but only for new sessions
+OMARCHY_THEME_SKIP_BACKGROUND=1 omarchy theme set vscode-2026 || echo "Could not set theme vscode-2026"
 
 if [[ "$(getent passwd "$USER" | cut -d: -f7)" != "$(command -v zsh)" ]]; then
     echo "Setting Zsh as default shell..."

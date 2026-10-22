@@ -1,0 +1,23 @@
+#!/bin/bash
+# CPU% and RAM used (GB) for the omarchy bar.
+
+read -r _ u1 n1 s1 i1 w1 irq1 sirq1 _ < /proc/stat
+sleep 0.3
+read -r _ u2 n2 s2 i2 w2 irq2 sirq2 _ < /proc/stat
+
+idle1=$((i1 + w1))
+idle2=$((i2 + w2))
+total1=$((u1 + n1 + s1 + i1 + w1 + irq1 + sirq1))
+total2=$((u2 + n2 + s2 + i2 + w2 + irq2 + sirq2))
+total_diff=$((total2 - total1))
+idle_diff=$((idle2 - idle1))
+
+cpu_pct=0
+[[ $total_diff -gt 0 ]] && cpu_pct=$(( (100 * (total_diff - idle_diff)) / total_diff ))
+
+mem_total_kb=$(awk '/^MemTotal:/{print $2}' /proc/meminfo)
+mem_avail_kb=$(awk '/^MemAvailable:/{print $2}' /proc/meminfo)
+mem_used_gb=$(awk -v t="$mem_total_kb" -v a="$mem_avail_kb" 'BEGIN{printf "%.1f", (t-a)/1024/1024}')
+
+printf '{"text":"󰍛 %s%%  \xee\x89\xa6 %sG","tooltip":"CPU %s%% \xc2\xb7 RAM %sG used"}\n' \
+  "$cpu_pct" "$mem_used_gb" "$cpu_pct" "$mem_used_gb"
