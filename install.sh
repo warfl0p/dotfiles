@@ -23,7 +23,7 @@ omarchy install terminal alacritty
 # Apps referenced by hypr bindings/autostart, launch-workspace-apps and sesh windows.
 omarchy pkg add google-chrome dgop
 omarchy pkg aur add visual-studio-code-bin seafile-client hyprmoncfg-bin \
-    spotifast-bin dankcalendar-bin mprocs onlyoffice-bin
+    spotifast-bin dankcalendar-bin onlyoffice-bin
 
 # Third-party omarchy-shell plugins (own matthias.* plugins are stowed below)
 for url in \
@@ -58,7 +58,7 @@ stow -t ~ "${PACKAGES[@]}"
 # Register the custom tmux syntax used by sesh previews
 bat cache --build
 
-# Tools pinned in ~/.config/mise/config.toml (claude, codex, gh, pi)
+# Tools pinned in ~/.config/mise/config.toml (claude, codex, gh, mprocs, opencode, pi)
 mise install
 
 # One ssh-agent for every shell; .zshrc points SSH_AUTH_SOCK at this socket

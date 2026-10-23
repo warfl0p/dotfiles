@@ -2,6 +2,8 @@
 claude = "latest"
 codex = "latest"
 gh = "latest"
+# 0.10 renamed the binary to dekit and its AUR build fails; 0.9 still ships mprocs
+mprocs = "0.9"
 opencode = { version = "latest", allow_builds = ["@opencode/cli"] }
 pi = "latest"
 
