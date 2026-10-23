@@ -65,6 +65,8 @@ mise install
 systemctl --user enable --now ssh-agent.socket
 systemctl --user daemon-reload
 systemctl --user enable --now zsh-history-backup.timer
+# Monitor profile daemon; the crmne.hyprmoncfg bar plugin talks to its socket
+systemctl --user enable --now hyprmoncfgd.service
 
 # Keep VS Code on its own theme when the Omarchy theme changes
 mkdir -p ~/.local/state/omarchy/toggles && touch ~/.local/state/omarchy/toggles/skip-vscode-theme-changes
