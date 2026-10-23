@@ -67,7 +67,7 @@ startup_script = "clear && ssh sysadmin@10.211.76.5"
 
 [[window]]
 name = "services"
-startup_script = "mprocs"
+startup_script = "dekit mprocs"
 
 [[session]]
 name = "home_lab"
