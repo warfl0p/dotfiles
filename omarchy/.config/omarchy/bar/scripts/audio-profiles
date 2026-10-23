@@ -1,0 +1,25 @@
+#!/bin/bash
+# Bluetooth card profiles for the default sink (music vs calls codec).
+#   audio-profiles          print "key<TAB>label<TAB>1|0" per available profile
+#   audio-profiles <key>    switch to that profile
+# ALSA cards are skipped: their profiles are noise.
+sink=$(pactl get-default-sink 2>/dev/null)
+dev=$(pactl -f json list sinks 2>/dev/null | jq -r --arg s "$sink" \
+  '.[] | select(.name == $s and .properties["device.api"] == "bluez5") | .properties["device.id"]')
+[[ -n $dev ]] || exit 0
+card=$(pactl -f json list cards 2>/dev/null | jq -r --arg d "$dev" '.[] | select(.properties["object.id"] == $d)')
+[[ -n $card ]] || exit 0
+
+if [[ -n ${1:-} ]]; then
+  exec pactl set-card-profile "$(jq -r .name <<<"$card")" "$1"
+fi
+
+jq -r '
+  .active_profile as $a
+  | .profiles | to_entries[] | select(.key != "off" and .value.available)
+  | [.key,
+     (.value.description
+       | sub("High Fidelity Playback \\(A2DP Sink, codec "; "Music (")
+       | sub("Headset Head Unit \\(HSP/HFP, codec "; "Calls (")),
+     (if .key == $a then 1 else 0 end)]
+  | @tsv' <<<"$card"
