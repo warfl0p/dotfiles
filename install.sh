@@ -23,7 +23,7 @@ omarchy install terminal alacritty
 # Apps referenced by hypr bindings/autostart, launch-workspace-apps and sesh windows.
 omarchy pkg add google-chrome dgop
 omarchy pkg aur add visual-studio-code-bin seafile-client hyprmoncfg-bin \
-    spotifast-bin dankcalendar-bin mprocs-bin onlyoffice-bin
+    spotifast-bin dankcalendar-bin mprocs onlyoffice-bin
 
 # Third-party omarchy-shell plugins (own matthias.* plugins are stowed below)
 for url in \
