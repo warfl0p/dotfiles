@@ -14,7 +14,7 @@ fi
 # `omarchy pkg add` is idempotent: it skips packages that are already present.
 # Core: everything the shell, tmux, sesh and git configs depend on.
 omarchy pkg add stow zsh neovim tmux fzf fd bat eza git git-delta uv \
-    github-cli zoxide jq tokei yazi diffnav lazygit mise
+    github-cli zoxide jq tokei yazi diffnav lazygit
 omarchy pkg aur add sesh-bin oh-my-posh-bin
 
 # Install Alacritty and make it the xdg-terminal-exec default (Super + Return)
