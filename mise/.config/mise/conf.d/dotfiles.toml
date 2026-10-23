@@ -1,0 +1,9 @@
+# Tools on top of Omarchy's own ~/.config/mise/config.toml, which its agent
+# wrappers (claude, codex, gh, pi, ...) write to on first use.
+[tools]
+dekit = "latest"
+# opencode installs from npm and its postinstall needs node, which a fresh
+# Omarchy does not always have in its global config
+node = "latest"
+oh-my-posh = "latest"
+opencode = { version = "latest", allow_builds = ["@opencode/cli"] }

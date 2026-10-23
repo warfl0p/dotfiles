@@ -58,7 +58,7 @@ stow -t ~ "${PACKAGES[@]}"
 # Register the custom tmux syntax used by sesh previews
 bat cache --build
 
-# Tools pinned in ~/.config/mise/config.toml (claude, codex, dekit, gh, node, oh-my-posh, opencode, pi)
+# Tools from ~/.config/mise/conf.d/dotfiles.toml (dekit, node, oh-my-posh, opencode)
 mise install
 
 # One ssh-agent for every shell; .zshrc points SSH_AUTH_SOCK at this socket
