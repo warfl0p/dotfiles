@@ -6,3 +6,5 @@ debug
 foo.*
 *.log
 data
+# Omarchy links this to the current theme (absolute path, which stow refuses)
+lua/plugins/theme.lua

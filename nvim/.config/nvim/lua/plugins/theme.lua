@@ -1,1 +1,0 @@
-/home/matthias/.local/state/omarchy/current/theme/neovim.lua
