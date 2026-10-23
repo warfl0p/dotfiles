@@ -15,7 +15,7 @@ Personal dotfiles for Arch Linux (Omarchy) managed with [GNU Stow](https://www.g
 ├── mise/        # mise tools in conf.d/dotfiles.toml (dekit, node, oh-my-posh, opencode); config.toml stays Omarchy's
 ├── misc/        # Miscellaneous configs (terminal-colors.d/cal.scheme)
 ├── nvim/        # Neovim (LazyVim-based) config and plugins
-├── omarchy/     # Omarchy shell.json (bar layout), shell.toml (surface styling), custom themes (vscode-2026) and own omarchy-shell plugins (matthias.*)
+├── omarchy/     # Omarchy shell.json (bar layout), shell.toml (surface styling), custom themes (vscode-2026) with their wallpaper in backgrounds/ and own omarchy-shell plugins (matthias.*)
 ├── posh/        # Oh My Posh prompt themes (minimal, active; custom_kushal, previous)
 ├── sesh/        # sesh session manager config (tmux session definitions)
 ├── systemd/     # systemd user units (zsh-history-backup timer)

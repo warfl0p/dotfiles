@@ -81,23 +81,9 @@ xdg-mime default onlyoffice-desktopeditors.desktop $(grep '^MimeType=' \
     | grep -E '^application/(msword|vnd\.(ms-|openxmlformats|oasis))')
 xdg-mime default nvim.desktop text/csv
 
-# OMARCHY_THEME_SKIP_BACKGROUND (hyprland.lua) keeps the background link, but on a
-# fresh install it points into ~/.local/state/omarchy/current/theme, which a theme
-# switch replaces. Repoint it at the same image in the theme's own folder first.
-state=~/.local/state/omarchy/current
-bg=$(readlink "$state/background" || true)
-if [[ $bg == "$state/theme/"* ]]; then
-    old_theme=$(cat "$state/theme.name")
-    for dir in "${OMARCHY_PATH:-/usr/share/omarchy}/themes/$old_theme" ~/.config/omarchy/themes/"$old_theme"; do
-        if [[ -f $dir/${bg#"$state/theme/"} ]]; then
-            omarchy theme bg set "$dir/${bg#"$state/theme/"}"
-            break
-        fi
-    done
-fi
-
-# The theme ships no wallpaper; hyprland.lua sets this too, but only for new sessions
-OMARCHY_THEME_SKIP_BACKGROUND=1 omarchy theme set vscode-2026 || echo "Could not set theme vscode-2026"
+# Its wallpaper comes from omarchy/.config/omarchy/backgrounds/vscode-2026. Override
+# the skip hyprland.lua sets, which a terminal started after stowing inherits.
+OMARCHY_THEME_SKIP_BACKGROUND=0 omarchy theme set vscode-2026 || echo "Could not set theme vscode-2026"
 
 if [[ "$(getent passwd "$USER" | cut -d: -f7)" != "$(command -v zsh)" ]]; then
     echo "Setting Zsh as default shell..."

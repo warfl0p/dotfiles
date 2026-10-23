@@ -25,7 +25,7 @@ It asks for your sudo password, your password again for `chsh`, and a GitHub log
    - Enables the user units `ssh-agent.socket`, `zsh-history-backup.timer` and `hyprmoncfgd.service`
    - Keeps VS Code on its own theme when the Omarchy theme changes
    - Opens Office/OpenDocument files in OnlyOffice and `.csv` files in Neovim
-   - Applies the `vscode-2026` theme while keeping the current background
+   - Applies the `vscode-2026` theme and its wallpaper
 7. **Interactive steps**: sets zsh as the login shell (`chsh`) and runs `gh auth login` if gh is not logged in yet.
 
 The script can be rerun: packages already installed and files already stowed are skipped.
