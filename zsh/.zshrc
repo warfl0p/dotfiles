@@ -14,6 +14,8 @@ autoload -Uz _zinit
 # ─── Environment ──────────────────────────────────────────────────────────────
 typeset -U path PATH  # drop duplicate PATH entries in nested shells (tmux, zsh -ic)
 export PATH=$HOME/.npm-global/bin:$PATH
+# mise tools (oh-my-posh below, gh, node, agents); Omarchy only does this for bash
+eval "$(mise activate zsh)"
 
 # ─── History ──────────────────────────────────────────────────────────────────
 export HISTSIZE=12000

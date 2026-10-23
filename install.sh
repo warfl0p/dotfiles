@@ -14,8 +14,8 @@ fi
 # `omarchy pkg add` is idempotent: it skips packages that are already present.
 # Core: everything the shell, tmux, sesh and git configs depend on.
 omarchy pkg add stow zsh neovim tmux fzf fd bat eza git git-delta uv \
-    github-cli zoxide jq tokei yazi diffnav lazygit
-omarchy pkg aur add sesh-bin oh-my-posh-bin
+    zoxide jq tokei yazi diffnav lazygit
+omarchy pkg aur add sesh-bin
 
 # Install Alacritty and make it the xdg-terminal-exec default (Super + Return)
 omarchy install terminal alacritty
@@ -58,7 +58,7 @@ stow -t ~ "${PACKAGES[@]}"
 # Register the custom tmux syntax used by sesh previews
 bat cache --build
 
-# Tools pinned in ~/.config/mise/config.toml (claude, codex, dekit, gh, opencode, pi)
+# Tools pinned in ~/.config/mise/config.toml (claude, codex, dekit, gh, node, oh-my-posh, opencode, pi)
 mise install
 
 # One ssh-agent for every shell; .zshrc points SSH_AUTH_SOCK at this socket

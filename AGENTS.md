@@ -12,7 +12,7 @@ Personal dotfiles for Arch Linux (Omarchy) managed with [GNU Stow](https://www.g
 ├── git/         # Global git config (~/.config/git/config, delta pager)
 ├── hypr/        # Hyprland overrides (bindings, autostart, monitor scripts); monitors.lua is left to hyprmoncfg
 ├── lazygit/     # lazygit config (delta diff renderer)
-├── mise/        # mise global tools (claude, codex, dekit, gh, opencode, pi)
+├── mise/        # mise global tools (claude, codex, dekit, gh, node, oh-my-posh, opencode, pi)
 ├── misc/        # Miscellaneous configs (terminal-colors.d/cal.scheme)
 ├── nvim/        # Neovim (LazyVim-based) config and plugins
 ├── omarchy/     # Omarchy shell.json (bar layout), shell.toml (surface styling), custom themes (vscode-2026) and own omarchy-shell plugins (matthias.*)

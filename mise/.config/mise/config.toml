@@ -2,6 +2,9 @@
 claude = "latest"
 codex = "latest"
 gh = "latest"
+# Omarchy sets node globally; npm tools like opencode need it to install
+node = "latest"
+oh-my-posh = "latest"
 dekit = "latest"
 opencode = { version = "latest", allow_builds = ["@opencode/cli"] }
 pi = "latest"
