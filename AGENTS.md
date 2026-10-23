@@ -27,7 +27,7 @@ Personal dotfiles for Arch Linux (Omarchy) managed with [GNU Stow](https://www.g
 
 ## Installation
 
-All packages are deployed via `stow -t ~` from the repo root. The `install.sh` script installs core packages and the apps the configs reference through `omarchy pkg add` / `omarchy pkg aur add`, adds the third-party omarchy-shell plugins, clones the catppuccin tmux theme, moves any conflicting real files aside as `*.pre-stow`, stows everything, runs `bat cache --build` and `mise install`, enables the `ssh-agent.socket`, `zsh-history-backup.timer` and `hyprmoncfgd.service` user units, sets the vscode-2026 theme, and finally runs the interactive `chsh` / `gh auth login` steps:
+All packages are deployed via `stow -t ~` from the repo root. The `install.sh` script runs `omarchy update -y`, installs core packages and the apps the configs reference through `omarchy pkg add` / `omarchy pkg aur add`, adds the third-party omarchy-shell plugins, clones the catppuccin tmux theme, moves any conflicting real files aside as `*.pre-stow`, stows everything, runs `bat cache --build` and `mise install`, enables the `ssh-agent.socket`, `zsh-history-backup.timer` and `hyprmoncfgd.service` user units, sets the vscode-2026 theme, and finally runs the interactive `chsh` / `gh auth login` steps:
 
 ```sh
 stow -t ~ git tmux posh zsh nvim sesh alacritty misc bat hypr bin omarchy mise systemd lazygit

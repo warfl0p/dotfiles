@@ -10,6 +10,10 @@ if ! command -v omarchy &> /dev/null; then
     exit 1
 fi
 
+# A fresh offline-ISO install has no pacman sync databases yet, and installing
+# on top of stale ones would be a partial upgrade, so update the system first.
+omarchy update -y
+
 # Packages go through omarchy so system upgrades stay behind `omarchy update`.
 # `omarchy pkg add` is idempotent: it skips packages that are already present.
 # Core: everything the shell, tmux, sesh and git configs depend on.
