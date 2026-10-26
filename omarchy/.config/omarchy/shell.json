@@ -65,7 +65,8 @@
           "id": "matthias.audio"
         },
         {
-          "id": "omarchy.power"
+          "id": "omarchy.power",
+          "showPercentage": true
         }
       ]
     },
