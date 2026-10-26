@@ -17,7 +17,7 @@ hl.config({
 hl.config({
   decoration = {
     -- Use round window corners.
-    rounding = 8,
+    rounding = 6,
 
     -- Omarchy disables blur; enable it for the glass OSD. Windows are forced
     -- opaque below, so they get no visible blur.

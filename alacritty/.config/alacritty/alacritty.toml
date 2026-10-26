@@ -17,10 +17,11 @@ family = "JetBrainsMono Nerd Font"
 
 [window]
 decorations = "None"
+dynamic_padding = true
 
 [window.padding]
-x = 14
-y = 14
+x = 0
+y = 0
 
 [[keyboard.bindings]]
 key = "F11"
