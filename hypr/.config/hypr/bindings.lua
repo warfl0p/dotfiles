@@ -100,3 +100,12 @@ hl.unbind("XF86AudioLowerVolume") -- was: Volume down
 o.bind("XF86AudioRaiseVolume", "Volume up", "~/.local/bin/omarchy-audio-output-volume raise", { locked = true, repeating = true })
 o.bind("XF86AudioLowerVolume", "Volume down", "~/.local/bin/omarchy-audio-output-volume lower", { locked = true, repeating = true })
 
+
+-- Make SUPER+comma only dismiss the last notification (default acts on it:
+-- dismiss, invoke, or focus).
+hl.unbind("SUPER + comma") -- was: Dismiss, invoke, or focus last notification
+o.bind("SUPER + comma", "Dismiss last notification", { ipc = "notifications.dismissOne" })
+hl.unbind("SUPER + ALT + comma") -- was: Dismiss last notification (now on SUPER+comma)
+
+-- Fix dead two-finger scroll on the Synaptics touchpad by reloading its driver.
+o.bind("SUPER + CTRL + SHIFT + T", "Reload touchpad driver", "pkexec sh -c 'modprobe -r hid_multitouch && modprobe hid_multitouch' && notify-send 'Touchpad driver reloaded'")

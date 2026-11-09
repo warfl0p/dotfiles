@@ -22,6 +22,10 @@ hl.config({
     -- Omarchy disables blur; enable it for the glass OSD. Windows are forced
     -- opaque below, so they get no visible blur.
     blur = { enabled = true, size = 5, passes = 2 },
+
+    -- Omarchy 4.5's qconsole raises this to 0.6 for every special workspace,
+    -- which makes the bar unreadable behind the scratchpad. Back to Hyprland's default.
+    dim_special = 0.2,
   },
 })
 
@@ -65,3 +69,8 @@ hl.layer_rule({
   blur = true,
   ignore_alpha = 0.6,
 })
+
+-- Opt another application in to Omarchy's standard transparency.
+-- Find its class with: hyprctl clients
+-- o.transparent_window("my-app")
+-- o.transparent_window("my-app", "0.9 0.85") -- Custom active/inactive opacity.
