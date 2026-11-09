@@ -34,3 +34,6 @@ background-alpha = 0.8
 border-width     = 0
 background       = "#272829"
 background-alpha = 0.8
+
+[bar]
+background = "#191a1b"

@@ -1,21 +1,30 @@
 {
   "bar": {
-    "centerAnchor": "omarchy.clock",
+    "background": "none",
     "layout": {
       "center": [
         {
-          "id": "omarchy.indicators"
-        },
-        {
-          "id": "omarchy.clock",
           "format": "ddd d MMM HH:mm",
           "formatAlt": "d MMMM 'W'ww yyyy",
+          "id": "omarchy.clock",
           "verticalFormat": "HH\n—\nmm",
           "weekStartDay": "monday"
-        },
+        }
+      ],
+      "centerBegin": [
         {
-          "id": "omarchy.keyboard-layout"
-        },
+          "id": "omarchy.indicators",
+          "items": [
+            "PasswordlessSudo",
+            "ScreenRecording",
+            "RemoteSession",
+            "Reminder",
+            "NightLight",
+            "StayAwake"
+          ]
+        }
+      ],
+      "centerEnd": [
         {
           "id": "omarchy.system-update"
         }
@@ -27,7 +36,7 @@
         },
         {
           "id": "omarchy.spacer",
-          "size": 14
+          "size": 10
         },
         {
           "id": "matthias.media"
@@ -35,22 +44,25 @@
       ],
       "right": [
         {
-          "id": "cpu-ram",
-          "type": "command",
-          "exec": "~/.config/omarchy/bar/scripts/cpu-ram-status",
-          "interval": 2
+          "id": "omarchy.tray"
         },
         {
-          "id": "omarchy.tray"
+          "id": "omarchy.keyboard-layout"
         },
         {
           "id": "njpatel.omapager"
         },
         {
+          "exec": "~/.config/omarchy/bar/scripts/cpu-ram-status",
+          "id": "cpu-ram",
+          "interval": 2,
+          "type": "command"
+        },
+        {
           "id": "matthias.tailscale"
         },
         {
-          "id": "omarchy.agents"
+          "id": "matthias.agents"
         },
         {
           "id": "omarchy.bluetooth"
@@ -68,38 +80,38 @@
           "id": "omarchy.power",
           "showPercentage": true
         }
-      ]
+      ],
+      "tray": []
     },
-    "position": "top",
-    "transparent": true
+    "position": "top"
   },
-  "idle": {
-    "lock": 300,
-    "screensaver": 150
-  },
-  "plugins": [
-    {
-      "id": "io.github.sirjul1337.lock-explorer",
-      "boot": "snapshot:split",
-      "design": "split",
-      "reduceMotion": "on",
-      "blankMs": 60000,
-      "openAs": "full"
-    },
-    {
-      "id": "matthias.osd"
-    }
+  "cloneSourceRestores": [
+    "matthias.media",
+    "io.github.sirjul1337.lock-explorer",
+    "matthias.osd"
   ],
-  "version": 1,
   "disabledPlugins": [
     "omarchy.notifications",
     "omarchy.media",
     "omarchy.lock",
     "omarchy.osd"
   ],
-  "cloneSourceRestores": [
-    "matthias.media",
-    "io.github.sirjul1337.lock-explorer",
-    "matthias.osd"
-  ]
+  "idle": {
+    "lock": 300,
+    "screensaver": 150
+  },
+  "plugins": [
+    {
+      "blankMs": 60000,
+      "boot": "snapshot:split",
+      "design": "split",
+      "id": "io.github.sirjul1337.lock-explorer",
+      "openAs": "full",
+      "reduceMotion": "on"
+    },
+    {
+      "id": "matthias.osd"
+    }
+  ],
+  "version": 1
 }
