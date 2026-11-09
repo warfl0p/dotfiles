@@ -30,3 +30,10 @@ vim.keymap.set("n", "<leader>o", function()
   -- open URI
   vim.fn.jobstart({ "xdg-open", obs_uri })
 end, { desc = "Open current file in Obsidian" })
+
+-- Copy absolute path of current file (neo-tree already has `Y` for the hovered node)
+vim.keymap.set("n", "<leader>fy", function()
+  local path = vim.fn.expand("%:p")
+  vim.fn.setreg("+", path)
+  vim.notify(path, vim.log.levels.INFO, { title = "Copied path" })
+end, { desc = "Copy file path" })
