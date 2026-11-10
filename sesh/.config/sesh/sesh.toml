@@ -79,7 +79,7 @@ windows = ["claude"]
 name = "move"
 path = "~/Projects/move/"
 startup_command = "nvim"
-windows = ["claude", "ssh-move-migration"]
+windows = ["claude", "ssh-move-migration", "services"]
 
 [[window]]
 name = "ssh-move-migration"
